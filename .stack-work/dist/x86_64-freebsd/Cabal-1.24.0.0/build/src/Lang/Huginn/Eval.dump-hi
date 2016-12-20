@@ -1,0 +1,687 @@
+
+==================== FINAL INTERFACE ====================
+2016-12-20 10:55:22.84761913 UTC
+
+interface huginn-0.1.0.0-H85hIuVlPwkFCtmCyCbyhs:Lang.Huginn.Eval 8001
+  interface hash: dbf2015ccbe82e8cd90cb2c20eb3caa1
+  ABI hash: 7c7b189606bb4875b1405d7725657f15
+  export-list hash: 29219222456e7554340696990d6b09e2
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 1f27d47e00495382b6a64717b99d5fd4
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  Lang.Huginn.Eval.add
+  Lang.Huginn.Eval.calc
+  Lang.Huginn.Eval.divExp
+  Lang.Huginn.Eval.eq
+  Lang.Huginn.Eval.evalFns
+  Lang.Huginn.Eval.evals
+  Lang.Huginn.Eval.exprToString
+  Lang.Huginn.Eval.exprToValueTpl
+  Lang.Huginn.Eval.getNumber
+  Lang.Huginn.Eval.getVarValues
+  Lang.Huginn.Eval.gt
+  Lang.Huginn.Eval.gte
+  Lang.Huginn.Eval.isTrue
+  Lang.Huginn.Eval.lt
+  Lang.Huginn.Eval.lte
+  Lang.Huginn.Eval.mapEnvEntries
+  Lang.Huginn.Eval.mul
+  Lang.Huginn.Eval.pow
+  Lang.Huginn.Eval.runBinary
+  Lang.Huginn.Eval.runEval
+  Lang.Huginn.Eval.sub
+  Lang.Huginn.Eval.updateExp
+  Lang.Huginn.Eval.Env{Lang.Huginn.Eval.Env functions vars}
+  Lang.Huginn.Eval.EnvEntries
+  Lang.Huginn.Eval.EnvEntry
+  Lang.Huginn.Eval.EvalExpr
+  Lang.Huginn.Eval.EvalM
+module dependencies: Lang.Huginn.AST
+package dependencies: base-4.9.0.0* ghc-prim-0.5.0.0
+                      integer-gmp-1.0.0.1 mtl-2.2.1@mtl-2.2.1-6qsR1PHUy5lL47Hpoa4jCM
+                      transformers-0.5.2.0@transformers-0.5.2.0
+orphans: base-4.9.0.0:GHC.Base base-4.9.0.0:GHC.Float
+         transformers-0.5.2.0@transformers-0.5.2.0:Control.Monad.Trans.Error
+family instance modules: base-4.9.0.0:Control.Applicative
+                         base-4.9.0.0:Data.Either base-4.9.0.0:Data.Functor.Const
+                         base-4.9.0.0:Data.Functor.Identity base-4.9.0.0:Data.List.NonEmpty
+                         base-4.9.0.0:Data.Monoid base-4.9.0.0:Data.Semigroup
+                         base-4.9.0.0:Data.Type.Equality base-4.9.0.0:Data.Version
+                         base-4.9.0.0:Data.Void base-4.9.0.0:GHC.Exts
+                         base-4.9.0.0:GHC.Generics base-4.9.0.0:GHC.IO.Exception
+                         base-4.9.0.0:GHC.TypeLits
+import  -/  base-4.9.0.0:Data.Either bd9f099b82d4ed2d98c56d7144ac6957
+import  -/  base-4.9.0.0:Data.Functor 6fc476505db88d678632a4a838125f13
+import  -/  base-4.9.0.0:Data.Maybe 5f2ba364cbe65c060bc5436bc0b9d049
+import  -/  base-4.9.0.0:GHC.Base 8ed3be81c0707b322f975a84ae1bb816
+import  -/  base-4.9.0.0:GHC.Float 469226b1bc53433e95d0167dec5d0312
+import  -/  base-4.9.0.0:GHC.List 13d2451194c1c6e53b4f4f07947736dd
+import  -/  base-4.9.0.0:GHC.Num 48f506a8f4ecf06285d0a0706594dcc0
+import  -/  base-4.9.0.0:GHC.Real 08bf4acb5f2508f89d6fbcd57fe232e9
+import  -/  base-4.9.0.0:GHC.Show 952347a6ab730bcb25c0854d8bc6ca51
+import  -/  base-4.9.0.0:Prelude b9bddb97799837fe67a8d00939a5b6c3
+import  -/  ghc-prim-0.5.0.0:GHC.Classes 0bdf3d057a415ec1b84a7b1994efbe47
+import  -/  Lang.Huginn.AST 0243c00dd0692625e27a72e542d234fd
+  exports: 747e9c538254d3fed821e0bf29d1ee0d
+  Add 5f0d9137517f26838ce2b52bb05810db
+  Bl a3dbad024fcf7e48cacc512fa1da496a
+  Closure 7fda796bacdd3c3861952a2b13c9a519
+  Div 50e06efc5b7b2ca31a255853109621ac
+  EQUALS bbcff39f6a780232c72b74f768215a25
+  Eadd 5105f238f8b43e4d674d9b1438934631
+  Ediv 6d390f67728d94f74d9e1f0a117366b4
+  Eeq 00a067a70bb9a06f5af968e0a68345d8
+  Egt 251afe361c2c3178a9d62d031c92da48
+  Egte 056f071ad4f26bcac41194fd1c2dcdfb
+  Elt 70e8418ea4dd3e6c6ed990192c075064
+  Elte f3b0cc4ce83d4f073c9de48b43d9d2a0
+  Emul e8bcd3ab28f3d18298d73e6ccc7a9b58
+  Epow a3a03a5c8049fcad092b7e1df81212b2
+  Err ef753ef416829e59702c7adcd2a9e2fd
+  Esub 1ed10b7ae6f1f4866ddf647dd75a51d6
+  Expr 0b058677be4ec97ab4103cbe49e2227b
+  If 78b232430c9185531ab4918cca69ff8e
+  Let 8dd2e82a89ee32adaeb62394c4cafbff
+  Mul 779d7da237abb86297e5c11447b5db19
+  NaN a1c93bf37215a9198a1e6aceffd9f91e
+  Num 7be033c728cd6bab83df86572bd1154c
+  Operant 09214a4114acbf7b00306d5f88e25cce
+  POW e95c72e44e31b61c6cd3f9426d7c026e
+  Parse 750e1b685b892b3174b6ba87cc186871
+  Str 66413e3baa5365d844ef175c52371044
+  Sub af76a9cb7666de9cf6a049196f2d7492
+  Unbound 8eab762a1ffe5be2f51723b8ac1f006f
+  Uncomparable 747574db58d582ea3e99c817fcd0655d
+  Unimplemented c9ec779352cdc82c035b4c6b82803a74
+  Unsupported ba1344c295372126cc8969a39f6a12e0
+  Var ff292b2a0eab3757473b0f45880dfa21
+import  -/  mtl-2.2.1@mtl-2.2.1-6qsR1PHUy5lL47Hpoa4jCM:Control.Monad.State d851912d62cbc95e043a9cc13c3581de
+import  -/  mtl-2.2.1@mtl-2.2.1-6qsR1PHUy5lL47Hpoa4jCM:Control.Monad.State.Class b303b4a4ee6363bc95266312b9afc751
+import  -/  transformers-0.5.2.0@transformers-0.5.2.0:Control.Monad.Trans.State.Lazy 16a585e7f12cd771300b3cab638df233
+41952b1a210b5627eb6df5d80c7d00ba
+  $fShowEnv :: GHC.Show.Show Lang.Huginn.Eval.Env
+  DFunId
+  {- Strictness: m, Inline: [ALWAYS] CONLIKE,
+     Unfolding: DFun:.
+                  @ Lang.Huginn.Eval.Env
+                  Lang.Huginn.Eval.$fShowEnv_$cshowsPrec
+                  Lang.Huginn.Eval.$fShowEnv_$cshow
+                  Lang.Huginn.Eval.$fShowEnv_$cshowList -}
+41952b1a210b5627eb6df5d80c7d00ba
+  $fShowEnv1 :: Lang.Huginn.Eval.Env -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (\ (w :: Lang.Huginn.Eval.Env)
+                   (w1 :: GHC.Base.String) ->
+                 case w of ww { Lang.Huginn.Eval.Env ww1 ww2 ->
+                 Lang.Huginn.Eval.$w$cshowsPrec 0# ww1 ww2 w1 }) -}
+41952b1a210b5627eb6df5d80c7d00ba
+  $fShowEnv_$cshow :: Lang.Huginn.Eval.Env -> GHC.Base.String
+  {- Arity: 1, Strictness: <S,1*U(1*U,1*U)>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (x :: Lang.Huginn.Eval.Env) ->
+                 Lang.Huginn.Eval.$fShowEnv_$cshowsPrec
+                   GHC.Show.shows22
+                   x
+                   (GHC.Types.[] @ GHC.Types.Char)) -}
+41952b1a210b5627eb6df5d80c7d00ba
+  $fShowEnv_$cshowList :: [Lang.Huginn.Eval.Env] -> GHC.Show.ShowS
+  {- Arity: 2,
+     Unfolding: (GHC.Show.showList__
+                   @ Lang.Huginn.Eval.Env
+                   Lang.Huginn.Eval.$fShowEnv1) -}
+41952b1a210b5627eb6df5d80c7d00ba
+  $fShowEnv_$cshowsPrec ::
+    GHC.Types.Int -> Lang.Huginn.Eval.Env -> GHC.Show.ShowS
+  {- Arity: 3, Strictness: <S(S),1*U(U)><S,1*U(1*U,1*U)><L,U>,
+     Inline: INLINE[0],
+     Unfolding: InlineRule (3, True, False)
+                (\ (w :: GHC.Types.Int)
+                   (w1 :: Lang.Huginn.Eval.Env)
+                   (w2 :: GHC.Base.String) ->
+                 case w of ww { GHC.Types.I# ww1 ->
+                 case w1 of ww2 { Lang.Huginn.Eval.Env ww3 ww4 ->
+                 Lang.Huginn.Eval.$w$cshowsPrec ww1 ww3 ww4 w2 } }) -}
+d3a3a96cb5c2cfa532f14ec4a2d02ebc
+  $tc'Env :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   12949861169022278218##
+                   12328603981253574378##
+                   Lang.Huginn.Eval.$trModule
+                   Lang.Huginn.Eval.$tc'Env1) -}
+3bb0a279c201f29e85cf8739aa3bd7af
+  $tc'Env1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "'Env"#) -}
+509f20a2198d4184d7f76df1bd82b8a4
+  $tcEnv :: GHC.Types.TyCon
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.TyCon
+                   789926489075773434##
+                   3375819795389680318##
+                   Lang.Huginn.Eval.$trModule
+                   Lang.Huginn.Eval.$tcEnv1) -}
+f53e2a592e4a0c5d39325fa97bd68a03
+  $tcEnv1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "Env"#) -}
+07251d11315d200aec0f524fcb5cef1b
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   Lang.Huginn.Eval.$trModule2
+                   Lang.Huginn.Eval.$trModule1) -}
+35f6eec5659d438ac2ab958c4d58d7b5
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "Lang.Huginn.Eval"#) -}
+f3db8aa8156138b53e07785893b574ac
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS
+                   "huginn-0.1.0.0-H85hIuVlPwkFCtmCyCbyhs"#) -}
+c56bf914fc86552b1d8d5d47680fa930
+  $w$cshowsPrec ::
+    GHC.Prim.Int#
+    -> Lang.Huginn.Eval.EnvEntries
+    -> Lang.Huginn.Eval.EnvEntries
+    -> GHC.Base.String
+    -> GHC.Base.String
+  {- Arity: 4, Strictness: <S,U><L,1*U><L,1*U><L,U>, Inline: [0] -}
+f94fc3e6b31ac554961058ecdc8ae15f
+  $wevalFns ::
+    GHC.Base.String
+    -> Lang.Huginn.Eval.EnvEntries
+    -> Lang.Huginn.Eval.EnvEntries
+    -> Lang.Huginn.AST.Expr
+  {- Arity: 3, Strictness: <L,U><L,U><S,U>, Inline: [0],
+     Unfolding: (\ (w :: GHC.Base.String)
+                   (ww :: Lang.Huginn.Eval.EnvEntries)
+                   (ww1 :: Lang.Huginn.Eval.EnvEntries) ->
+                 case GHC.List.lookup
+                        @ GHC.Base.String
+                        @ Lang.Huginn.AST.Expr
+                        GHC.Classes.$fEq[]_$s$fEq[]1
+                        w
+                        ww1 of wild {
+                   GHC.Base.Nothing
+                   -> case ((Lang.Huginn.Eval.evals
+                               (Lang.Huginn.AST.Err (Lang.Huginn.AST.Unbound w)))
+                              `cast`
+                            (Control.Monad.Trans.State.Lazy.N:StateT[0]
+                                 <Lang.Huginn.Eval.Env>_N
+                                 <Data.Functor.Identity.Identity>_R
+                                 <Lang.Huginn.AST.Expr>_N)
+                              (Lang.Huginn.Eval.Env ww ww1))
+                             `cast`
+                           (Data.Functor.Identity.N:Identity[0]
+                                <(Lang.Huginn.AST.Expr,
+                                  Lang.Huginn.Eval.Env)>_R) of wild1 { (,) x ds1 ->
+                      x }
+                   GHC.Base.Just v
+                   -> case ((Lang.Huginn.Eval.evals v)
+                              `cast`
+                            (Control.Monad.Trans.State.Lazy.N:StateT[0]
+                                 <Lang.Huginn.Eval.Env>_N
+                                 <Data.Functor.Identity.Identity>_R
+                                 <Lang.Huginn.AST.Expr>_N)
+                              (Lang.Huginn.Eval.Env ww ww1))
+                             `cast`
+                           (Data.Functor.Identity.N:Identity[0]
+                                <(Lang.Huginn.AST.Expr,
+                                  Lang.Huginn.Eval.Env)>_R) of wild1 { (,) x ds1 ->
+                      x } }) -}
+45f67a1223483d6f90781b7074b1c398
+  $wgetVarValues ::
+    GHC.Base.String
+    -> Lang.Huginn.Eval.EnvEntries
+    -> Lang.Huginn.Eval.EnvEntries
+    -> Lang.Huginn.AST.Expr
+  {- Arity: 3, Strictness: <L,U><S,U><L,U>, Inline: [0],
+     Unfolding: (\ (w :: GHC.Base.String)
+                   (ww :: Lang.Huginn.Eval.EnvEntries)
+                   (ww1 :: Lang.Huginn.Eval.EnvEntries) ->
+                 case GHC.List.lookup
+                        @ GHC.Base.String
+                        @ Lang.Huginn.AST.Expr
+                        GHC.Classes.$fEq[]_$s$fEq[]1
+                        w
+                        ww of wild {
+                   GHC.Base.Nothing -> Lang.Huginn.Eval.$wevalFns w ww ww1
+                   GHC.Base.Just v -> v }) -}
+41952b1a210b5627eb6df5d80c7d00ba
+  data Env
+    = Env {vars :: Lang.Huginn.Eval.EnvEntries,
+           functions :: Lang.Huginn.Eval.EnvEntries}
+5827623f4a2334b671083b60f07ce000
+  type EnvEntries = [Lang.Huginn.Eval.EnvEntry]
+f5731036ffa98b07e9a243e558483e08
+  type EnvEntry = (GHC.Base.String, Lang.Huginn.AST.Expr)
+2b432860fd16784e72f517f53cac4f1a
+  type EvalExpr = (Lang.Huginn.AST.Expr, Lang.Huginn.Eval.Env)
+7bb7bc595072dd85516e1cbfaf870440
+  type EvalM =
+    Control.Monad.Trans.State.Lazy.State
+      Lang.Huginn.Eval.Env Lang.Huginn.AST.Expr
+40621f2a97b058586f65e13311bf6145
+  add ::
+    Lang.Huginn.AST.Expr
+    -> Lang.Huginn.AST.Expr -> Lang.Huginn.AST.Expr
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><L,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: Lang.Huginn.AST.Expr) (ds1 :: Lang.Huginn.AST.Expr) ->
+                 case ds of wild {
+                   DEFAULT -> Lang.Huginn.Eval.add1
+                   Lang.Huginn.AST.Num a
+                   -> case ds1 of wild1 {
+                        DEFAULT -> Lang.Huginn.Eval.add1
+                        Lang.Huginn.AST.Num b
+                        -> Lang.Huginn.AST.Num (GHC.Float.plusDouble a b) } }) -}
+1b41ff7cd3b9038962cdbf447f9f6da9
+  add1 :: Lang.Huginn.AST.Expr
+  {- HasNoCafRefs, Strictness: m11,
+     Unfolding: (Lang.Huginn.AST.Err Lang.Huginn.AST.NaN) -}
+786ffbd5769dd138e34dacce6833d25e
+  calc ::
+    Lang.Huginn.AST.Operant
+    -> Lang.Huginn.AST.Expr
+    -> Lang.Huginn.AST.Expr
+    -> Lang.Huginn.AST.Expr
+  {- Arity: 3, HasNoCafRefs, Strictness: <S,1*U><L,1*U><L,1*U> -}
+b131a1507bfdf8bdb8a5be7d01940b3c
+  divExp ::
+    Lang.Huginn.AST.Expr
+    -> Lang.Huginn.AST.Expr -> Lang.Huginn.AST.Expr
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><L,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: Lang.Huginn.AST.Expr) (ds1 :: Lang.Huginn.AST.Expr) ->
+                 case ds of wild {
+                   DEFAULT -> Lang.Huginn.Eval.add1
+                   Lang.Huginn.AST.Num a
+                   -> case ds1 of wild1 {
+                        DEFAULT -> Lang.Huginn.Eval.add1
+                        Lang.Huginn.AST.Num b
+                        -> Lang.Huginn.AST.Num (GHC.Float.divideDouble a b) } }) -}
+ac7b1388291c9b01d94585a279cfc468
+  eq ::
+    Lang.Huginn.AST.Expr
+    -> Lang.Huginn.AST.Expr -> Lang.Huginn.AST.Expr
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><L,1*U>,
+     Unfolding: (\ (ds :: Lang.Huginn.AST.Expr)
+                   (ds1 :: Lang.Huginn.AST.Expr) ->
+                 case ds of wild {
+                   DEFAULT -> Lang.Huginn.Eval.eq_eta
+                   Lang.Huginn.AST.Num a
+                   -> case ds1 of wild1 {
+                        DEFAULT -> Lang.Huginn.Eval.eq_eta
+                        Lang.Huginn.AST.Num b
+                        -> Lang.Huginn.AST.Bl (GHC.Classes.eqDouble a b) }
+                   Lang.Huginn.AST.Str a
+                   -> case ds1 of wild1 {
+                        DEFAULT -> Lang.Huginn.Eval.eq_eta
+                        Lang.Huginn.AST.Str b
+                        -> Lang.Huginn.AST.Bl (GHC.Base.eqString a b) }
+                   Lang.Huginn.AST.Bl a
+                   -> case ds1 of wild1 {
+                        DEFAULT -> Lang.Huginn.Eval.eq_eta
+                        Lang.Huginn.AST.Bl b
+                        -> Lang.Huginn.AST.Bl (GHC.Classes.$fEqBool_$c== a b) } }) -}
+fc47773c7b4d4ad8982032870c9d2d4f
+  eq_eta :: Lang.Huginn.AST.Expr
+  {- HasNoCafRefs, Strictness: m11,
+     Unfolding: (Lang.Huginn.AST.Err Lang.Huginn.AST.Uncomparable) -}
+c13e36a6ee91b0200ebab955df71b22f
+  evalFns ::
+    GHC.Base.String -> Lang.Huginn.Eval.Env -> Lang.Huginn.AST.Expr
+  {- Arity: 2, Strictness: <L,U><S(LS),U(U,U)>, Inline: INLINE[0],
+     Unfolding: InlineRule (2, True, False)
+                (\ (w :: GHC.Base.String) (w1 :: Lang.Huginn.Eval.Env) ->
+                 case w1 of ww { Lang.Huginn.Eval.Env ww1 ww2 ->
+                 Lang.Huginn.Eval.$wevalFns w ww1 ww2 }) -}
+2456ac47aa724343f048a98bfc775c34
+  evals :: Lang.Huginn.AST.Expr -> Lang.Huginn.Eval.EvalM
+  {- Arity: 1, Strictness: <S,1*U> -}
+f546cacf3b5e09d2ba3eb3dde2870e89
+  exprToString :: Lang.Huginn.AST.Expr -> GHC.Base.String
+  {- Arity: 1, Strictness: <S,1*U>,
+     Unfolding: (\ (ds :: Lang.Huginn.AST.Expr) ->
+                 case ds of wild {
+                   DEFAULT -> Lang.Huginn.Eval.exprToString3
+                   Lang.Huginn.AST.Num n -> GHC.Float.$fShowDouble_$cshow n
+                   Lang.Huginn.AST.Str n -> GHC.Show.$fShow[]_$s$cshow1 n
+                   Lang.Huginn.AST.Bl ds1
+                   -> case ds1 of wild1 {
+                        GHC.Types.False -> Lang.Huginn.Eval.exprToString2
+                        GHC.Types.True -> Lang.Huginn.Eval.exprToString1 } }) -}
+28a72ce2f15daaa4a43f608349a0a53f
+  exprToString1 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "true"#) -}
+ea9447f66e36afb9f35a2cd42ace333d
+  exprToString2 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "false"#) -}
+a15761f05b24aa1f471f385b0b8e5852
+  exprToString3 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "Error"#) -}
+c433872739a8c9da6763895ec7ac7bb9
+  exprToValueTpl ::
+    Lang.Huginn.AST.Expr -> (GHC.Base.String, GHC.Base.String)
+  {- Arity: 1, Strictness: <S,1*U>m, Inline: INLINE[0],
+     Unfolding: InlineRule (1, True, False)
+                (\ (w :: Lang.Huginn.AST.Expr) ->
+                 case w of wild {
+                   DEFAULT
+                   -> (Lang.Huginn.Eval.exprToValueTpl4,
+                       Lang.Huginn.Eval.exprToString3)
+                   Lang.Huginn.AST.Num n
+                   -> (Lang.Huginn.Eval.exprToValueTpl3,
+                       GHC.Float.$fShowDouble_$cshow n)
+                   Lang.Huginn.AST.Str n
+                   -> (Lang.Huginn.Eval.exprToValueTpl2,
+                       GHC.Show.$fShow[]_$s$cshow1 n)
+                   Lang.Huginn.AST.Bl ds
+                   -> case ds of wild1 {
+                        GHC.Types.False
+                        -> (Lang.Huginn.Eval.exprToValueTpl1,
+                            Lang.Huginn.Eval.exprToString2)
+                        GHC.Types.True
+                        -> (Lang.Huginn.Eval.exprToValueTpl1,
+                            Lang.Huginn.Eval.exprToString1) } }) -}
+dfcc83c78c8d3d3ec73a1e89f09b166d
+  exprToValueTpl1 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "bool"#) -}
+16b0f3a518b153fecaba2b6eacfba79b
+  exprToValueTpl2 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "string"#) -}
+45e461ae6abcdb9b74c52ac5865a2d33
+  exprToValueTpl3 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "float"#) -}
+28b5b951f3e1881dcef4ea3805dd8bff
+  exprToValueTpl4 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "error"#) -}
+a5fe03d47bc8766b1c130c3781003bc1
+  functions :: Lang.Huginn.Eval.Env -> Lang.Huginn.Eval.EnvEntries
+  RecSel Left Lang.Huginn.Eval.Env
+  {- Arity: 1, HasNoCafRefs, Strictness: <S(LS),1*U(A,1*U)>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: Lang.Huginn.Eval.Env) ->
+                 case ds of wild { Lang.Huginn.Eval.Env ds1 ds2 -> ds2 }) -}
+63ffe757052bd57cd2673613ae239b07
+  getNumber :: Lang.Huginn.AST.Expr -> Lang.Huginn.AST.Expr
+  {- Arity: 1, HasNoCafRefs, Strictness: <S,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: Lang.Huginn.AST.Expr) ->
+                 case ds of wild {
+                   DEFAULT -> Lang.Huginn.Eval.add1
+                   Lang.Huginn.AST.Num fl -> Lang.Huginn.AST.Num fl
+                   Lang.Huginn.AST.Bl ds1
+                   -> case ds1 of wild1 {
+                        GHC.Types.False -> Lang.Huginn.Eval.getNumber3
+                        GHC.Types.True -> Lang.Huginn.Eval.getNumber1 } }) -}
+9d68bb43a6f2bb928a8c1c401717a934
+  getNumber1 :: Lang.Huginn.AST.Expr
+  {- HasNoCafRefs, Strictness: m3,
+     Unfolding: (Lang.Huginn.AST.Num Lang.Huginn.Eval.getNumber2) -}
+7cd7c7e9e93a0a129f2c4e2e0fd5f44a
+  getNumber2 :: GHC.Types.Double
+  {- HasNoCafRefs, Strictness: m, Unfolding: (GHC.Types.D# 1.0##) -}
+64bfd22b828683f799edaf99fbb874ca
+  getNumber3 :: Lang.Huginn.AST.Expr
+  {- HasNoCafRefs, Strictness: m3,
+     Unfolding: (Lang.Huginn.AST.Num Lang.Huginn.Eval.getNumber4) -}
+d7e66c3dbb01d53a9fc80724bbac0f64
+  getNumber4 :: GHC.Types.Double
+  {- HasNoCafRefs, Strictness: m, Unfolding: (GHC.Types.D# 0.0##) -}
+80a5d81cb7ffd081d43b8550fa9151bd
+  getVarValues ::
+    GHC.Base.String -> Lang.Huginn.Eval.Env -> Lang.Huginn.AST.Expr
+  {- Arity: 2, Strictness: <L,U><S(SL),1*U(U,U)>, Inline: INLINE[0],
+     Unfolding: InlineRule (2, True, False)
+                (\ (w :: GHC.Base.String) (w1 :: Lang.Huginn.Eval.Env) ->
+                 case w1 of ww { Lang.Huginn.Eval.Env ww1 ww2 ->
+                 Lang.Huginn.Eval.$wgetVarValues w ww1 ww2 }) -}
+0182cefb051c4a4a9a6847cdc4275a07
+  gt ::
+    Lang.Huginn.AST.Expr
+    -> Lang.Huginn.AST.Expr -> Lang.Huginn.AST.Expr
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><L,1*U>,
+     Unfolding: (\ (ds :: Lang.Huginn.AST.Expr)
+                   (ds1 :: Lang.Huginn.AST.Expr) ->
+                 case ds of wild {
+                   DEFAULT -> Lang.Huginn.Eval.eq_eta
+                   Lang.Huginn.AST.Num a
+                   -> case ds1 of wild1 {
+                        DEFAULT -> Lang.Huginn.Eval.eq_eta
+                        Lang.Huginn.AST.Num b
+                        -> Lang.Huginn.AST.Bl (GHC.Classes.$fOrdDouble_$c> a b) }
+                   Lang.Huginn.AST.Str a
+                   -> case ds1 of wild1 {
+                        DEFAULT -> Lang.Huginn.Eval.eq_eta
+                        Lang.Huginn.AST.Str b
+                        -> Lang.Huginn.AST.Bl (GHC.Classes.$fOrd[]_$s$c>1 a b) } }) -}
+495027deacacc52213d4500de6264719
+  gte ::
+    Lang.Huginn.AST.Expr
+    -> Lang.Huginn.AST.Expr -> Lang.Huginn.AST.Expr
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><L,1*U>,
+     Unfolding: (\ (ds :: Lang.Huginn.AST.Expr)
+                   (ds1 :: Lang.Huginn.AST.Expr) ->
+                 case ds of wild {
+                   DEFAULT -> Lang.Huginn.Eval.eq_eta
+                   Lang.Huginn.AST.Num a
+                   -> case ds1 of wild1 {
+                        DEFAULT -> Lang.Huginn.Eval.eq_eta
+                        Lang.Huginn.AST.Num b
+                        -> Lang.Huginn.AST.Bl (GHC.Classes.$fOrdDouble_$c>= a b) }
+                   Lang.Huginn.AST.Str a
+                   -> case ds1 of wild1 {
+                        DEFAULT -> Lang.Huginn.Eval.eq_eta
+                        Lang.Huginn.AST.Str b
+                        -> Lang.Huginn.AST.Bl (GHC.Classes.$fOrd[]_$s$c>=1 a b) } }) -}
+c044acbbf7cfdd6f9d0cfff317ff6962
+  isTrue :: Lang.Huginn.AST.Expr -> GHC.Types.Bool
+  {- Arity: 1, HasNoCafRefs, Strictness: <S,1*U>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: Lang.Huginn.AST.Expr) ->
+                 case ds of wild {
+                   DEFAULT -> GHC.Types.False Lang.Huginn.AST.Bl ds1 -> ds1 }) -}
+226ba33a44aa0f6ffa452b47a3cdf316
+  lt ::
+    Lang.Huginn.AST.Expr
+    -> Lang.Huginn.AST.Expr -> Lang.Huginn.AST.Expr
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><L,1*U>,
+     Unfolding: (\ (ds :: Lang.Huginn.AST.Expr)
+                   (ds1 :: Lang.Huginn.AST.Expr) ->
+                 case ds of wild {
+                   DEFAULT -> Lang.Huginn.Eval.eq_eta
+                   Lang.Huginn.AST.Num a
+                   -> case ds1 of wild1 {
+                        DEFAULT -> Lang.Huginn.Eval.eq_eta
+                        Lang.Huginn.AST.Num b
+                        -> Lang.Huginn.AST.Bl (GHC.Classes.$fOrdDouble_$c< a b) }
+                   Lang.Huginn.AST.Str a
+                   -> case ds1 of wild1 {
+                        DEFAULT -> Lang.Huginn.Eval.eq_eta
+                        Lang.Huginn.AST.Str b
+                        -> Lang.Huginn.AST.Bl (GHC.Classes.$fOrd[]_$s$c<1 a b) } }) -}
+e482381c55fb214fdc581bdbad7265a0
+  lte ::
+    Lang.Huginn.AST.Expr
+    -> Lang.Huginn.AST.Expr -> Lang.Huginn.AST.Expr
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><L,1*U>,
+     Unfolding: (\ (ds :: Lang.Huginn.AST.Expr)
+                   (ds1 :: Lang.Huginn.AST.Expr) ->
+                 case ds of wild {
+                   DEFAULT -> Lang.Huginn.Eval.eq_eta
+                   Lang.Huginn.AST.Num a
+                   -> case ds1 of wild1 {
+                        DEFAULT -> Lang.Huginn.Eval.eq_eta
+                        Lang.Huginn.AST.Num b
+                        -> Lang.Huginn.AST.Bl (GHC.Classes.$fOrdDouble_$c<= a b) }
+                   Lang.Huginn.AST.Str a
+                   -> case ds1 of wild1 {
+                        DEFAULT -> Lang.Huginn.Eval.eq_eta
+                        Lang.Huginn.AST.Str b
+                        -> Lang.Huginn.AST.Bl (GHC.Classes.$fOrd[]_$s$c<=1 a b) } }) -}
+6b6a8f24bb3017f9121584e18872ec67
+  mapEnvEntries ::
+    (GHC.Base.String, Data.Either.Either t Lang.Huginn.AST.Expr)
+    -> Lang.Huginn.Eval.EnvEntry
+  {- Arity: 1, HasNoCafRefs, Strictness: <S(LS),1*U(U,1*U)>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ @ t
+                   (ds :: (GHC.Base.String,
+                           Data.Either.Either t Lang.Huginn.AST.Expr)) ->
+                 case ds of wild { (,) n ds1 ->
+                 case ds1 of wild1 {
+                   Data.Either.Left ds2 -> (n, Lang.Huginn.Eval.mapEnvEntries1)
+                   Data.Either.Right ex -> (n, ex) } }) -}
+55390d2304f8d0ef8ba151264eb08326
+  mapEnvEntries1 :: Lang.Huginn.AST.Expr
+  {- HasNoCafRefs, Strictness: m11,
+     Unfolding: (Lang.Huginn.AST.Err Lang.Huginn.AST.Parse) -}
+1ef7c8141c726f941b68801b33d6dc9b
+  mul ::
+    Lang.Huginn.AST.Expr
+    -> Lang.Huginn.AST.Expr -> Lang.Huginn.AST.Expr
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><L,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: Lang.Huginn.AST.Expr) (ds1 :: Lang.Huginn.AST.Expr) ->
+                 case ds of wild {
+                   DEFAULT -> Lang.Huginn.Eval.add1
+                   Lang.Huginn.AST.Num a
+                   -> case ds1 of wild1 {
+                        DEFAULT -> Lang.Huginn.Eval.add1
+                        Lang.Huginn.AST.Num b
+                        -> Lang.Huginn.AST.Num (GHC.Float.timesDouble a b) } }) -}
+3b0e51ea93920ab0562ee67c69ec30f7
+  pow ::
+    Lang.Huginn.AST.Expr
+    -> Lang.Huginn.AST.Expr -> Lang.Huginn.AST.Expr
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><L,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: Lang.Huginn.AST.Expr) (ds1 :: Lang.Huginn.AST.Expr) ->
+                 case ds of wild {
+                   DEFAULT -> Lang.Huginn.Eval.add1
+                   Lang.Huginn.AST.Num a
+                   -> case ds1 of wild1 {
+                        DEFAULT -> Lang.Huginn.Eval.add1
+                        Lang.Huginn.AST.Num b
+                        -> Lang.Huginn.AST.Num (GHC.Float.powerDouble a b) } }) -}
+1527b54d61fa6240cc41e07fb61c2f32
+  runBinary ::
+    (Lang.Huginn.AST.Expr -> Lang.Huginn.AST.Expr -> t)
+    -> Lang.Huginn.AST.Expr
+    -> Lang.Huginn.AST.Expr
+    -> Lang.Huginn.Eval.Env
+    -> t
+  {- Arity: 4, Strictness: <C(C(S)),1*C1(C1(U))><L,1*U><L,1*U><L,U>,
+     Unfolding: InlineRule (4, True, False)
+                (\ @ t
+                   (op :: Lang.Huginn.AST.Expr -> Lang.Huginn.AST.Expr -> t)
+                   (left :: Lang.Huginn.AST.Expr)
+                   (right :: Lang.Huginn.AST.Expr)
+                   (env :: Lang.Huginn.Eval.Env) ->
+                 op
+                   (case ((Lang.Huginn.Eval.evals left)
+                            `cast`
+                          (Control.Monad.Trans.State.Lazy.N:StateT[0]
+                               <Lang.Huginn.Eval.Env>_N
+                               <Data.Functor.Identity.Identity>_R
+                               <Lang.Huginn.AST.Expr>_N)
+                            env)
+                           `cast`
+                         (Data.Functor.Identity.N:Identity[0]
+                              <(Lang.Huginn.AST.Expr,
+                                Lang.Huginn.Eval.Env)>_R) of wild { (,) x ds1 ->
+                    x })
+                   (case ((Lang.Huginn.Eval.evals right)
+                            `cast`
+                          (Control.Monad.Trans.State.Lazy.N:StateT[0]
+                               <Lang.Huginn.Eval.Env>_N
+                               <Data.Functor.Identity.Identity>_R
+                               <Lang.Huginn.AST.Expr>_N)
+                            env)
+                           `cast`
+                         (Data.Functor.Identity.N:Identity[0]
+                              <(Lang.Huginn.AST.Expr,
+                                Lang.Huginn.Eval.Env)>_R) of wild { (,) x ds1 ->
+                    x })) -}
+05376539343961b4008837c6a5849562
+  runEval ::
+    Lang.Huginn.Eval.Env
+    -> Lang.Huginn.AST.Expr
+    -> (Lang.Huginn.AST.Expr, Lang.Huginn.Eval.Env)
+  {- Arity: 2, Strictness: <L,U><S,1*U>,
+     Unfolding: InlineRule (0, True, True)
+                Lang.Huginn.Eval.runEval1
+                  `cast`
+                (<Lang.Huginn.Eval.Env>_R
+                 ->_R <Lang.Huginn.AST.Expr>_R
+                 ->_R Data.Functor.Identity.N:Identity[0]
+                          <(Lang.Huginn.AST.Expr, Lang.Huginn.Eval.Env)>_R) -}
+6fb194f77b18ad1b679f61c26385042a
+  runEval1 ::
+    Lang.Huginn.Eval.Env
+    -> Lang.Huginn.AST.Expr
+    -> Data.Functor.Identity.Identity
+         (Lang.Huginn.AST.Expr, Lang.Huginn.Eval.Env)
+  {- Arity: 2, Strictness: <L,U><S,1*U>,
+     Unfolding: InlineRule (2, True, True)
+                (\ (env :: Lang.Huginn.Eval.Env) (e :: Lang.Huginn.AST.Expr) ->
+                 (Lang.Huginn.Eval.evals e)
+                   `cast`
+                 (Control.Monad.Trans.State.Lazy.N:StateT[0]
+                      <Lang.Huginn.Eval.Env>_N
+                      <Data.Functor.Identity.Identity>_R
+                      <Lang.Huginn.AST.Expr>_N)
+                   env) -}
+8a55388eae64b633c05a9aefa7532162
+  sub ::
+    Lang.Huginn.AST.Expr
+    -> Lang.Huginn.AST.Expr -> Lang.Huginn.AST.Expr
+  {- Arity: 2, HasNoCafRefs, Strictness: <S,1*U><L,1*U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ (ds :: Lang.Huginn.AST.Expr) (ds1 :: Lang.Huginn.AST.Expr) ->
+                 case ds of wild {
+                   DEFAULT -> Lang.Huginn.Eval.add1
+                   Lang.Huginn.AST.Num a
+                   -> case ds1 of wild1 {
+                        DEFAULT -> Lang.Huginn.Eval.add1
+                        Lang.Huginn.AST.Num b
+                        -> Lang.Huginn.AST.Num (GHC.Float.minusDouble a b) } }) -}
+441663204e78123ac62b8cfc79ab0292
+  updateExp ::
+    GHC.Base.String
+    -> Lang.Huginn.Eval.EvalExpr -> Lang.Huginn.Eval.EvalExpr
+  {- Arity: 2, HasNoCafRefs, Strictness: <L,U><S,1*U(U,U(1*U,1*U))>m,
+     Unfolding: InlineRule (2, True, False)
+                (\ (n :: GHC.Base.String)
+                   (ds :: (Lang.Huginn.AST.Expr, Lang.Huginn.Eval.Env)) ->
+                 case ds of wild { (,) e v ->
+                 (e,
+                  Lang.Huginn.Eval.Env
+                    (GHC.Types.:
+                       @ (GHC.Base.String, Lang.Huginn.AST.Expr)
+                       (n, e)
+                       (case v of wild1 { Lang.Huginn.Eval.Env ds1 ds2 -> ds1 }))
+                    (case v of wild1 { Lang.Huginn.Eval.Env ds1 ds2 -> ds2 })) }) -}
+c21d4817e0f5df180014a4cbb5f7f2a0
+  vars :: Lang.Huginn.Eval.Env -> Lang.Huginn.Eval.EnvEntries
+  RecSel Left Lang.Huginn.Eval.Env
+  {- Arity: 1, HasNoCafRefs, Strictness: <S(SL),1*U(1*U,A)>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (ds :: Lang.Huginn.Eval.Env) ->
+                 case ds of wild { Lang.Huginn.Eval.Env ds1 ds2 -> ds1 }) -}
+instance [safe] GHC.Show.Show [Lang.Huginn.Eval.Env]
+  = Lang.Huginn.Eval.$fShowEnv
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: safe
+require own pkg trusted: False
+

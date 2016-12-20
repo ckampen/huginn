@@ -1,0 +1,290 @@
+
+==================== FINAL INTERFACE ====================
+2016-12-20 11:17:53.540842 UTC
+
+interface hugin_IqzXpp8LztLLTlnmoPtP9a:Lang.Huginn 7103
+  interface hash: 65751b7d27c04dddde4b3d12b278c982
+  ABI hash: 6e7e61ec0e58dc616c8c5a114eeca861
+  export-list hash: 6d6597cc042dc7aab0ccb486f9cfd8de
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 57e8d9dce19f30dae5b133731f6e132c
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  Lang.Huginn.Eval.add
+  Lang.Huginn.Eval.calc
+  Lang.Huginn.Eval.divExp
+  Lang.Huginn.Eval.eq
+  Lang.Huginn.Eval.evalFns
+  Lang.Huginn.Eval.evals
+  Lang.Huginn.Eval.exprToString
+  Lang.Huginn.Eval.exprToValueTpl
+  Lang.Huginn.Eval.getNumber
+  Lang.Huginn.Eval.getVarValues
+  Lang.Huginn.Eval.gt
+  Lang.Huginn.Eval.gte
+  Lang.Huginn.Eval.isTrue
+  Lang.Huginn.Eval.lt
+  Lang.Huginn.Eval.lte
+  Lang.Huginn.Eval.mapEnvEntries
+  Lang.Huginn.Eval.mul
+  Lang.Huginn.Eval.pow
+  Lang.Huginn.Eval.runBinary
+  Lang.Huginn.Eval.runEval
+  Lang.Huginn.Eval.sub
+  Lang.Huginn.Eval.updateExp
+  Lang.Huginn.Parser.array
+  Lang.Huginn.Parser.binary
+  Lang.Huginn.Parser.bla
+  Lang.Huginn.Parser.bool
+  Lang.Huginn.Parser.brackets
+  Lang.Huginn.Parser.closure
+  Lang.Huginn.Parser.code
+  Lang.Huginn.Parser.comma
+  Lang.Huginn.Parser.commaSep
+  Lang.Huginn.Parser.double
+  Lang.Huginn.Parser.elseStatement
+  Lang.Huginn.Parser.expr
+  Lang.Huginn.Parser.exprPython
+  Lang.Huginn.Parser.file
+  Lang.Huginn.Parser.formula
+  Lang.Huginn.Parser.ifStatement
+  Lang.Huginn.Parser.integer
+  Lang.Huginn.Parser.lexeme
+  Lang.Huginn.Parser.lexer
+  Lang.Huginn.Parser.line
+  Lang.Huginn.Parser.mkFnRec
+  Lang.Huginn.Parser.mkInstanceRow
+  Lang.Huginn.Parser.mkRow
+  Lang.Huginn.Parser.mkTestRow
+  Lang.Huginn.Parser.natural
+  Lang.Huginn.Parser.noZero
+  Lang.Huginn.Parser.notTabDelim
+  Lang.Huginn.Parser.number
+  Lang.Huginn.Parser.parens
+  Lang.Huginn.Parser.parseExpr
+  Lang.Huginn.Parser.parseTSVFunctions
+  Lang.Huginn.Parser.parseTSVInstances
+  Lang.Huginn.Parser.parseTSVTestValues
+  Lang.Huginn.Parser.pythonIf
+  Lang.Huginn.Parser.readDouble
+  Lang.Huginn.Parser.readExpr
+  Lang.Huginn.Parser.replace
+  Lang.Huginn.Parser.reservedOp
+  Lang.Huginn.Parser.statement
+  Lang.Huginn.Parser.stringLiteral
+  Lang.Huginn.Parser.stxArray
+  Lang.Huginn.Parser.stxBool
+  Lang.Huginn.Parser.stxLet
+  Lang.Huginn.Parser.stxNum
+  Lang.Huginn.Parser.stxString
+  Lang.Huginn.Parser.stxVar
+  Lang.Huginn.Parser.table
+  Lang.Huginn.Parser.term
+  Lang.Huginn.Parser.testParser
+  Lang.Huginn.Parser.todouble
+  Lang.Huginn.Parser.tsvCell
+  Lang.Huginn.Parser.tsvFunction
+  Lang.Huginn.Parser.tsvFunctionsFile
+  Lang.Huginn.Parser.tsvInstanceFile
+  Lang.Huginn.Parser.tsvInstanceLine
+  Lang.Huginn.Parser.tsvTestValuesFile
+  Lang.Huginn.Parser.tsvTestValuesLine
+  Lang.Huginn.Parser.tsvToken
+  Lang.Huginn.Parser.var
+  Lang.Huginn.Parser.word
+  Lang.Huginn.Parser.ws
+  Lang.Huginn.AST.Error{Lang.Huginn.AST.DivByZero Lang.Huginn.AST.NaN Lang.Huginn.AST.Parse Lang.Huginn.AST.Unbound Lang.Huginn.AST.Uncomparable Lang.Huginn.AST.Unimplemented Lang.Huginn.AST.Unsupported}
+  Lang.Huginn.AST.Expr{Lang.Huginn.AST.Arr Lang.Huginn.AST.Bl Lang.Huginn.AST.Bop Lang.Huginn.AST.Closure Lang.Huginn.AST.Const Lang.Huginn.AST.Eadd Lang.Huginn.AST.Ediv Lang.Huginn.AST.Eeq Lang.Huginn.AST.Egt Lang.Huginn.AST.Egte Lang.Huginn.AST.Elt Lang.Huginn.AST.Elte Lang.Huginn.AST.Emul Lang.Huginn.AST.Epow Lang.Huginn.AST.Err Lang.Huginn.AST.Esub Lang.Huginn.AST.If Lang.Huginn.AST.Let Lang.Huginn.AST.Num Lang.Huginn.AST.Str Lang.Huginn.AST.Uop Lang.Huginn.AST.Var}
+  Lang.Huginn.AST.Operant{Lang.Huginn.AST.Add Lang.Huginn.AST.Div Lang.Huginn.AST.EQUALS Lang.Huginn.AST.Error Lang.Huginn.AST.Mul Lang.Huginn.AST.POW Lang.Huginn.AST.Sub}
+  Lang.Huginn.Eval.Env{Lang.Huginn.Eval.Env Lang.Huginn.Eval.functions Lang.Huginn.Eval.vars}
+  Lang.Huginn.Eval.EnvEntries
+  Lang.Huginn.Eval.EnvEntry
+  Lang.Huginn.Eval.EvalExpr
+  Lang.Huginn.Eval.EvalM
+module dependencies: Lang.Huginn.AST Lang.Huginn.Eval
+                     Lang.Huginn.Parser
+package dependencies: array-0.5.1.0@array_67iodizgJQIIxYVTp4emlA
+                      base-4.8.2.0* binary-0.7.5.0@binar_3uXFWMoAGBg0xKP9MHKRwi
+                      bytestring-0.10.6.0@bytes_6VWy06pWzJq9evDvK2d4w6
+                      containers-0.5.6.2@conta_2C3ZI8RgPO2LBMidXKTvIU
+                      deepseq-1.4.1.1@deeps_6vMKxt5sPFR0XsbRWvvq59 ghc-prim-0.4.0.0
+                      hashable-1.2.4.0@hasha_EalUWgp8NarBYWPbvYAD8I integer-gmp-1.0.0.0
+                      mtl-2.2.1@mtl_Aue4leSeVkpKLsfHIV51E8
+                      parsec-3.1.11@parse_AtBt9uDOS2NCyWnucTHV3y
+                      semigroups-0.18.1@semig_LaeT7FLzCl4KIQUoVrPYl1
+                      tagged-0.8.4@tagge_LPeicl3HxVfGUMMwMEsAE6
+                      text-1.2.2.1@text_HmqVQnZSpjaC156ABqPhne
+                      transformers-0.4.2.0@trans_GZTjP9K5WFq01xC9BAGQpF
+                      unordered-containers-0.2.7.1@unord_5iWC5HdL16JGHXLbsgBJnw
+orphans: base-4.8.2.0:GHC.Base base-4.8.2.0:GHC.Float
+         binary-0.7.5.0@binar_3uXFWMoAGBg0xKP9MHKRwi:Data.Binary.Generic
+         bytestring-0.10.6.0@bytes_6VWy06pWzJq9evDvK2d4w6:Data.ByteString.Builder
+         hashable-1.2.4.0@hasha_EalUWgp8NarBYWPbvYAD8I:Data.Hashable.Generic
+         text-1.2.2.1@text_HmqVQnZSpjaC156ABqPhne:Data.Text
+         text-1.2.2.1@text_HmqVQnZSpjaC156ABqPhne:Data.Text.Lazy
+         text-1.2.2.1@text_HmqVQnZSpjaC156ABqPhne:Data.Text.Show
+         transformers-0.4.2.0@trans_GZTjP9K5WFq01xC9BAGQpF:Control.Monad.Trans.Error
+family instance modules: base-4.8.2.0:Control.Applicative
+                         base-4.8.2.0:Data.Either base-4.8.2.0:Data.Functor.Identity
+                         base-4.8.2.0:Data.Monoid base-4.8.2.0:Data.Type.Equality
+                         base-4.8.2.0:Data.Void base-4.8.2.0:GHC.Exts
+                         base-4.8.2.0:GHC.Generics
+                         containers-0.5.6.2@conta_2C3ZI8RgPO2LBMidXKTvIU:Data.IntMap.Base
+                         containers-0.5.6.2@conta_2C3ZI8RgPO2LBMidXKTvIU:Data.IntSet.Base
+                         containers-0.5.6.2@conta_2C3ZI8RgPO2LBMidXKTvIU:Data.Map.Base
+                         containers-0.5.6.2@conta_2C3ZI8RgPO2LBMidXKTvIU:Data.Sequence
+                         containers-0.5.6.2@conta_2C3ZI8RgPO2LBMidXKTvIU:Data.Set.Base
+                         semigroups-0.18.1@semig_LaeT7FLzCl4KIQUoVrPYl1:Data.List.NonEmpty
+                         semigroups-0.18.1@semig_LaeT7FLzCl4KIQUoVrPYl1:Data.Semigroup
+                         tagged-0.8.4@tagge_LPeicl3HxVfGUMMwMEsAE6:Data.Tagged
+                         text-1.2.2.1@text_HmqVQnZSpjaC156ABqPhne:Data.Text
+                         text-1.2.2.1@text_HmqVQnZSpjaC156ABqPhne:Data.Text.Lazy
+                         unordered-containers-0.2.7.1@unord_5iWC5HdL16JGHXLbsgBJnw:Data.HashMap.Base
+                         unordered-containers-0.2.7.1@unord_5iWC5HdL16JGHXLbsgBJnw:Data.HashSet
+import  -/  base-4.8.2.0:Prelude 694dcaf039efe62df1c44834e2dbd2fb
+import  -/  Lang.Huginn.AST 7f6fda1d887703f602a1de91a2651865
+  exports: c987d63c9651ff78892aa6d1c469de01
+  Add 89f4ac10514470ac0a558416d62a01f7
+  Arr c03874b5124e63d98f8b9114e391dcaa
+  Bl 9b7d60c4f240a9b58d00a952f850cba8
+  Bop d9ed399a98efba8ddc59a4f7c8d0a181
+  Closure 096bffbddb1e5027394096be9323ae33
+  Const b88b79878b0aca9e9fd933e969aa63cd
+  Div fbac2a5419426365c6e6f7d546dcf228
+  DivByZero 194d7e6185b30b4dd9e8b69b66cd44ea
+  EQUALS 35b9f864f95de8d779610753b9434fa3
+  Eadd bfb93db3ef5094fe0873e1065671fc10
+  Ediv f617217198a0b4df287b7c42e303884c
+  Eeq 5173c2f74de21c63e04050d4d7cc61c0
+  Egt d3c07e7b701a09f8665f4dd5f5ccb8cd
+  Egte bbfb21c3c11ee58420f4f9a7b417875b
+  Elt d82703d2eb5df863d78cfa962616fe2f
+  Elte 33d96465eea934c8f0a1f039b28e3de1
+  Emul 0291ddbbeca5b9164ac97793fe4b632c
+  Epow 56a434160fa668e07a715d9bfa6c1880
+  Err 88aeb38127935704988cd7c2982c1347
+  Error 7a2526e673b6878199ee452089521381
+  Error 6d7b5a3b375f91cc881bc84666462f1d
+  Esub 06c9e7a17140279e2a65f9b36e8d4bab
+  Expr 9bf6ed4e0c9b2ea4cfd44e502502934e
+  If 7b79fc1d3831c2437c8570124d5f135f
+  Let 925e29fdadf05ad38c94cd5ffdce6064
+  Mul 5f689df00ef278e11db53317dd5e83aa
+  NaN ecc8395bf151539eba6feddde5041320
+  Num 98a2516118ced8f2165570f494f144c7
+  Operant 44e352eb97efd59e07e178ed7274db83
+  POW 4d45db612a8d4dec4c4ef38300b79d73
+  Parse 80a08ff0df978faf7d08eb42547bbfab
+  Str b741b07a0d4ec9a8463706a04bc9cba1
+  Sub dc9d11060e177e0420153db727f3642d
+  Unbound 51beab5b61141602ab280fcbf4051628
+  Uncomparable 8429138997e3b07244de9b7813341976
+  Unimplemented 6d1a8249bc13959606d35ae419ff3161
+  Unsupported fb2e28935d862a023b5bb5250fed3eee
+  Uop caa86ea0348bb4e1900f3ae47aaad16b
+  Var 47975e3edc175c4462ab8d181bf328b0
+import  -/  Lang.Huginn.Eval 53e49023711ede88c1a2d9e636f03063
+  exports: 2956c2b4fe04384321721cfb67594f19
+  Env afa154bcbcdde8850403e2aab04ffa04
+  Env 825dbc9c7b6ff82443bc7c89e76fee89
+  EnvEntries fa09adcfa0b954f925a9731662827d0f
+  EnvEntry 15183993cb11d1576c20aaddf60d0c70
+  EvalExpr 4eb3f3b5152556aab24cc966c7190571
+  EvalM 65df42256bb8918c0af0d650be4958e9
+  add 079f61918f0f764871d90946754dcbff
+  calc 0560b4f78239c0a6c301e0ae25bbf808
+  divExp 9f271dab5b8b225585a47ed8e7e28ac2
+  eq df64dfde8a4cce479421f0203b641fe7
+  evalFns 8895d36343323f9f18a3af7a49447b88
+  evals bfb3d0c93bc473cf24b2b6cf96b60527
+  exprToString be7bfa8b44488684b7f37d96adb7b7e7
+  exprToValueTpl f6576deea5eddccc0f1cce5ef5280ae4
+  functions cea1c64a55a0fae675c1c10e060f9b31
+  getNumber e92a3c8621b7787361d54612d5b57cde
+  getVarValues b04351ecc4b3772fd38f625c1dd7b9f2
+  gt 0224f14736968dfc0e6217840193ba79
+  gte 4bf13c6616ae0144379d9578708ebf50
+  isTrue ba43f86bcae7039a565fe456a6f11f84
+  lt b55f7204936bd3d3c7c0500eaa19c0a8
+  lte 5a582bf1d87a13adc15e72892fba5b24
+  mapEnvEntries 187ca923826b7a7f98b21b244f5ba1a6
+  mul 1943748f74b284b9abca62e128833de0
+  pow 9b82f3e514e92487c35d5ca7e9e13402
+  runBinary b05c01da35dc64184a0ca388aa647c98
+  runEval d100238b8bff87dafa3fb021b577ae04
+  sub 5596e29b31f1991fe8dc948969c3a460
+  updateExp 3e7aaa43e3dd220ba3bab37d7f869f42
+  vars b5f74ce9e1b73d6254c0daa756276a4f
+import  -/  Lang.Huginn.Parser 88168b84d40ba17b67e19d479eb50875
+  exports: a3e74f0aeaa82657f49b394a7662c247
+  array 512c9a7087bf39aaac060b9ad039d42b
+  binary 9b7f879b7e0d705090a2797b561e034c
+  bla 9f6474ac3845c8031dd176058db8d53d
+  bool 8319d0126ed3a8c82e059282dc6b07b2
+  brackets ba3efc73af5d237f761c07aaff1e01b7
+  closure dd6e6914008c6e8ee246a1ed154bbfbb
+  code 1f3b60c7c53a701b04fabb321f495f3d
+  comma 27ea7f3466f956849b826d11b86e3dbb
+  commaSep 9d51a6a1fdb191f5c52a27730e6c7d2a
+  double 5602d978912700fb0f4f37ef2c0529d5
+  elseStatement 694ca340f72db59a2d3eb7fcb7ab118d
+  expr 1d066903b37e348c7ebf9ba16511ee67
+  exprPython d019bef4dad69904a9bdbee0b6f8487b
+  file 0d6bba31e5cda8411177d355ca9d9265
+  formula 9a1cd329d5ef5c962949d2f6ede66811
+  ifStatement cd73cd60aeaa894994ce8d05639eefde
+  integer 60b3b93c7d3519cf614b8acf8d71d773
+  lexeme b018282cf6d530193b6176f8cb34fa25
+  lexer 847f536710f03a242fc095e338326fa6
+  line 2e31eb945677a8a6b3b956ccbc35c4ca
+  mkFnRec 48a6904d546344ebfb2e3dd9dd2aa7d5
+  mkInstanceRow 6b8372030f3ec85afaa33a2a1527e93d
+  mkRow 8d552e8be2f712b2b20a4f7e18b7b962
+  mkTestRow cc7be711ed0e73c16171c1e050d01e2a
+  natural 2feb7319a61c4834eefb7ab11b30e1fe
+  noZero b05d7bbb60c3207b4ae9bf870938fe99
+  notTabDelim cd256344208225944e5ef82d9ded8e80
+  number 78123c7d8b698f914aa6655ac3101265
+  parens 5a937d6f331362bf5ba5ac50379a4487
+  parseExpr 8bd25b61f8eb44d1af665b1416f6120c
+  parseTSVFunctions 901acafde5e5b4f07358698b0096fc76
+  parseTSVInstances 06b7c9948340ee1b23b3f88033d6e5df
+  parseTSVTestValues 3949b298f5d29773fa29dddcdc0f1119
+  pythonIf 447736c02512af101af1e3c1c131db3a
+  readDouble c5d9e6ddea0a9097e9896f9adbed03b6
+  readExpr 0f592ecb230b9b54f2155a0ccd838c80
+  replace d31ecc4bea473f5e462d460679d16b4b
+  reservedOp 6bb8557d9d6537d735a4b39dc9f91e8d
+  statement 80874ce56666a08f1b5d51603083478e
+  stringLiteral 5ae0ab7db7d828117990a6517bd8eb2b
+  stxArray dc8b1ec742917077a562b895e4853d08
+  stxBool a1f36d7c29399c4610a178ef92f00189
+  stxLet b9e9cfcf902b6d816498af98747dbde7
+  stxNum 98da7a13c28a33fa7014d6c7ea7be06a
+  stxString cfa06bc813a973951c9b5c17379b44d4
+  stxVar 3ea8e567c25c0a7f1c0e9ac57d578d97
+  table 5ec6935003dfee93e2589d572795d4a8
+  term ecb71b8736ae215238023f96673f3a13
+  testParser 2a2974a4afec33af71072dab177f9dec
+  todouble 5f67ddaf01c262e5db991c6ad7172b53
+  tsvCell 0c3a9bf6cd822aca1ca2344b861913ad
+  tsvFunction 2b0725eb971f812840f06e4264ad4e56
+  tsvFunctionsFile 87c86742d28765aa636f64348f9c3227
+  tsvInstanceFile 2dcbbf1180117a7fdb71439ebe89f9d9
+  tsvInstanceLine a00b1b5e320a00456369abec6417e81d
+  tsvTestValuesFile 2af55a58fc2e38469746b6ead6431bea
+  tsvTestValuesLine 19d31984282674c485dda6547f288f55
+  tsvToken bffdc954114e78d6852c8065548c405b
+  var 313b4c448b4156bbe29145c5a4a611a1
+  word 135d2554f721a8a441a7ee9dd8bf7641
+  ws 656417fb441aab23130b11e9598769c1
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: safe
+require own pkg trusted: False
+
