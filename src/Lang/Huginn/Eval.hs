@@ -88,6 +88,7 @@ getVarValues name env = fromMaybe (evalFns name env) (lookup name (vars env))
 evalFns :: String -> Env -> Expr
 evalFns name env = evalState (evals (fromMaybe (Err $ Unbound name) (lookup name (functions env)))) env
 
+runBinary :: (Expr -> Expr -> a) -> Expr -> Expr -> Env -> a
 runBinary op left right env = evalState (evals left) env `op` evalState (evals right) env
 
 runEval :: Env -> Expr -> (Expr, Env)

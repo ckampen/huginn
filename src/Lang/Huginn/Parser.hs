@@ -17,40 +17,48 @@ import Lang.Huginn.AST
 import Lang.Huginn.Eval (EnvEntry)
 
 -- PARSER
-mkFnRec name fn = (name, parseExpr fn)
+-- mkFnRec ::
+-- mkFnRec name fn = (name, parseExpr fn)
 
-mkRow i name value value_type = (i, name, value, value_type)
-mkInstanceRow i name value value_type = (i, readExpr name value value_type)
--- mkTestRow i name "Error" tvalue = (i, name, 0.01010101, tvalue, False)
-mkTestRow i name hvalue tvalue = (i, name, hv, tv, round hv == round tv)
-    where hv = read hvalue :: Double
-          tv = read tvalue :: Double
+-- mkRow i name value value_type = (i, name, value, value_type)
+-- mkInstanceRow i name value value_type = (i, readExpr name value value_type)
+-- -- mkTestRow i name "Error" tvalue = (i, name, 0.01010101, tvalue, False)
+-- mkTestRow i name hvalue tvalue = (i, name, hv, tv, round hv == round tv)
+--     where hv = read hvalue :: Double
+--           tv = read tvalue :: Double
 
--- TSV
-notTabDelim = many (noneOf "\t\n")
+-- -- TSV
+-- notTabDelim = many (noneOf "\t\n")
 
-tsvCell = stringLiteral <|> notTabDelim
-tsvToken = tab *> tsvCell
+-- tsvCell = stringLiteral <|> notTabDelim
+-- tsvToken = tab *> tsvCell
 
-tsvFunction = mkFnRec <$> tsvCell <*> tsvToken
-tsvFunctionsFile = tsvFunction `endBy` string "\n" <* eof
-parseTSVFunctions = parse tsvFunctionsFile "ERROR"
+-- tsvFunction = mkFnRec <$> tsvCell <*> tsvToken
+-- tsvFunctionsFile = tsvFunction `endBy` string "\n" <* eof
+-- parseTSVFunctions = parse tsvFunctionsFile "ERROR"
 
-tsvInstanceFile = tsvInstanceLine `endBy` string "\n" <* eof
-tsvInstanceLine = mkInstanceRow <$> natural <*> tsvCell <*> tsvToken <*> tsvToken
-parseTSVInstances = parse tsvInstanceFile "ERROR"
+-- tsvInstanceFile = tsvInstanceLine `endBy` string "\n" <* eof
+-- tsvInstanceLine = mkInstanceRow <$> natural <*> tsvCell <*> tsvToken <*> tsvToken
+-- parseTSVInstances = parse tsvInstanceFile "ERROR"
 
-tsvTestValuesFile = tsvTestValuesLine `endBy` string "\n" <* eof
-tsvTestValuesLine = mkTestRow <$> natural <*> tsvCell <*> tsvToken <*> tsvToken
-parseTSVTestValues = parse tsvTestValuesFile "ERROR"
+-- tsvTestValuesFile = tsvTestValuesLine `endBy` string "\n" <* eof
+-- tsvTestValuesLine = mkTestRow <$> natural <*> tsvCell <*> tsvToken <*> tsvToken
+-- parseTSVTestValues = parse tsvTestValuesFile "ERROR"
 
 lexer :: P.TokenParser ()
 lexer = P.makeTokenParser (haskellDef { P.reservedOpNames = ["==", "=", "^", "+", "-", "*", "/"]})
 
+lexeme :: Parser a -> Parser a
 lexeme = P.lexeme lexer
 
+-- ws :: Parsec String () ()
+ws :: Parser ()
 ws = P.whiteSpace lexer
+-- comma :: Parsec String () String
+comma :: Parser String
 comma = P.comma lexer
+-- natural :: Parsec String () Integer
+natural :: Parser Integer
 natural = P.natural lexer
 
 closure :: Parser Expr
@@ -78,6 +86,7 @@ pythonIf = do
   right <- elseStatement
   return $ If (test, left, right)
 
+elseStatement :: Parser Expr
 elseStatement = lexeme (string "else") *> expr
 
 stxVar :: Parser Expr
@@ -109,8 +118,11 @@ replace o n (x:xs) = if x == o then
                      else
                        x:replace o n xs
 
+-- brackets :: Parser Expr
+brackets :: Parser a -> Parser a
 brackets = P.brackets lexer
 
+commaSep :: Parser a -> Parser [a]
 commaSep = P.commaSep lexer
 
 array :: Parser [Expr]
@@ -146,14 +158,19 @@ stxLet = do
 expr :: Parser Expr
 expr = try bla <|> stxString <|> stxArray <|> closure <|> stxNum <|> stxBool <|> stxLet  <|> stxVar
 
+parens :: Parser Expr -> Parser Expr
 parens = P.parens lexer
 
+double :: Parser Double
 double = P.float lexer
 
+integer :: Parser Integer
 integer = P.integer lexer
 
+todouble :: Integer -> Double
 todouble x = fromInteger x :: Double
 
+readDouble :: String -> Double
 readDouble x = read x :: Double
 
 noZero :: Parser String
@@ -164,14 +181,19 @@ noZero = do
 
 -- number = todouble <$> P.naturalOrFloat lexer
 --  noZero parser fixes faulty input e.g ".34"
+number :: Parser Double
 number = try double <|> todouble <$> integer <|> readDouble <$> noZero
 
+stxNum :: Parser Expr
 stxNum = Num <$> number
 
+reservedOp :: String -> Parser ()
 reservedOp = P.reservedOp lexer
 
+binary :: String -> (a -> a -> a) -> Assoc -> Operator Char () a
 binary name fn =  Infix (do {reservedOp  name; return fn})
 
+table :: [[Operator Char () Expr]]
 table = [
              [ binary "^" Epow AssocLeft]
              ,[ binary "*" Emul AssocLeft, binary "/" Ediv AssocLeft]
