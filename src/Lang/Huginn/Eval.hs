@@ -1,3 +1,4 @@
+{-# LANGUAGE GADTs #-}
 module Lang.Huginn.Eval where
 
 import Control.Monad.State
@@ -17,15 +18,6 @@ updateExp :: String -> EvalExpr -> EvalExpr
 updateExp n (e,v) = (e, Env {vars = vr, functions = fn})
   where vr = (n, e):vars v
         fn = functions v
-
--- evalFn :: String -> Env -> EvalExpr
--- evalFn name env = updateExp name res
---   where res = eval env (fromMaybe (Err $ Unbound name) (lookup name (functions env)))
-
--- getVarValue :: String -> Env -> EvalExpr
--- getVarValue name env = case lookup name (vars env) of
---                             Just v -> (v, env)
---                             Nothing -> evalFn name env
 
 getNumber :: Expr -> Expr
 getNumber (Num fl) = Num fl
@@ -61,16 +53,6 @@ mapEnvEntries :: (String, Either t Expr) -> EnvEntry
 mapEnvEntries (n, Right ex) = (n, ex)
 mapEnvEntries (n, Left _) = (n, Err Parse)
 
--- mapEval :: Env -> (String, Expr) -> (String, EvalExpr)
--- mapEval env (n, e) = (n, res)
---   where res = eval env e
-
--- -- mapEval' :: Env -> [(String, String)] -> [(String, String)]
--- mapEval' :: Env -> [(String, Expr)] -> [(String, String)]
--- mapEval' env ((name, fn):xs) = (name, exprToString res):mapEval' env' xs
---   where (res, env') = eval env fn
--- mapEval' _ [] = []
-
 isTrue :: Expr -> Bool
 isTrue (Bl True) = True
 isTrue (Bl False) = False
@@ -78,22 +60,33 @@ isTrue _ = False
 
 type EvalM = State Env Expr
 
+-- evalEvalM :: State s a -> s -> a
+evalEvalM :: EvalM -> Env -> Expr
+evalEvalM = evalState
+
+-- runEvalM :: State s a -> s -> (a, s)
+runEvalM :: EvalM -> Env -> (Expr, Env)
+runEvalM = runState
+
+type EvalEMS a = State Env a
+evalEvalEMS :: EvalEMS a -> Env -> a
+evalEvalEMS = evalState
+
+runEvalEMS :: EvalEMS a -> Env -> (a, Env)
+runEvalEMS = runState
+
 getVarValues :: String -> Env -> Expr
 getVarValues name env = fromMaybe (evalFns name env) (lookup name (vars env))
--- getVarValues name env = fromJust $ (lookup name (vars env)) <|> Just (evalFns name env)
--- getVarValues name env = case lookup name (vars env) of
---                             Just v -> v
---                             Nothing -> evalFns name env
 
 evalFns :: String -> Env -> Expr
-evalFns name env = evalState (evals (fromMaybe (Err $ Unbound name) (lookup name (functions env)))) env
+evalFns name env = evalEvalM (evals (fromMaybe (Err $ Unbound name) (lookup name (functions env)))) env
 
 runBinary :: (Expr -> Expr -> a) -> Expr -> Expr -> Env -> a
-runBinary op left right env = evalState (evals left) env `op` evalState (evals right) env
+runBinary op left right env = evalEvalM (evals left) env `op` evalEvalM (evals right) env
 
 runEval :: Env -> Expr -> (Expr, Env)
-runEval env e = runState (evals e) env
--- runEval env e = trace ("\n\n#########\n\n" ++ show e ++ "\n\n#########\n\n") $ runState (evals e) env
+runEval env e = runEvalM (evals e) env
+-- runEval env e = trace ("\n\n#########\n\n" ++ show e ++ "\n\n#########\n\n") $ runEvalM (evals e) env
 
 evals :: Expr -> EvalM
 evals (Eeq left right) = runBinary eq left right <$> get
@@ -110,70 +103,18 @@ evals (Var n) = fmap (getVarValues n) get
 evals a@(Num _) = return a
 evals b@(Bl _) = return b
 evals (Let n v ex) = do
-  (val, env) <- runState (evals v) <$> get
+  (val, env) <- runEvalM (evals v) <$> get
   -- put (env { vars = (n, val) : vars env })
-  return $ evalState (evals ex) (env { vars = (n, val) : vars env })
-evals (Closure e) = evalState (evals e) <$> get
+  return $ evalEvalM (evals ex) (env { vars = (n, val) : vars env })
+evals (Closure e) = evalEvalM (evals e) <$> get
 evals (If (test, left, right)) = do
-  (predicate, env) <- runState (evals test) <$> get
+  (predicate, env) <- runEvalM (evals test) <$> get
   case predicate of
-       (Bl True) -> return $ evalState (evals left) env
-       (Bl False) -> return $ evalState (evals right) env
+       (Bl True) -> return $ evalEvalM (evals left) env
+       (Bl False) -> return $ evalEvalM (evals right) env
        _ -> return $ Err Uncomparable
 evals e@(Err _) = return e
 evals e = return $ Err (Unimplemented (show e))
-
--- TODO: user StateT 
--- eval :: Env -> Expr -> EvalExpr
--- eval env (Eeq left right) = (left' `eq` right', env'')
---   where (left', env') = eval env left
---         (right', env'') = eval env' right
-
--- eval env (Egt left right) = (left' `gt` right', env'')
---   where (left', env') = eval env left
---         (right', env'') = eval env' right
-
--- eval env (Egte left right) = (left' `gte` right', env'')
---   where (left', env') = eval env left
---         (right', env'') = eval env' right
-
--- eval env (Elt left right) = (left' `lt` right', env'')
---   where (left', env') = eval env left
---         (right', env'') = eval env' right
-
--- eval env (Elte left right) = (left' `lte` right', env'')
---   where (left', env') = eval env left
---         (right', env'') = eval env' right
-
--- eval env (Epow left right) = (left' `pow` right', env'')
---   where (left', env') = eval env left
---         (right', env'') = eval env' right
--- eval env (Eadd left right) = (left' `add` right', env'')
---   where (left', env') = eval env left
---         (right', env'') = eval env' right
--- eval env (Esub left right) = (left' `sub` right', env'')
---   where (left', env') = eval env left
---         (right', env'') = eval env' right
--- eval env (Emul left right) = (left' `mul` right', env'')
---   where (left', env') = eval env left
---         (right', env'') = eval env' right
--- eval env (Ediv left right) = (left' `divExp` right', env'')
---   where (left', env') = eval env left
---         (right', env'') = eval env' right
--- eval env (If (test, left, right)) =
---   case predicate of
---        (Bl True) -> eval env' left
---        (Bl False) -> eval env' right
---        _ -> (Err Uncomparable, env')
---   where (predicate, env') = eval env test
-
--- eval env (Var n) = getVarValue n env
--- eval env (Closure e) = eval env e
--- eval env a@(Num _) = (a, env)
--- eval env b@(Bl _) = (b, env)
--- eval env (Let n v ex) = let val = eval env v in
---                           eval (env { vars = (n, fst val) : vars env }) ex
--- eval env ex = (ex, env) -- Err Unsupported
 
 add :: Expr -> Expr -> Expr
 add (Num a) (Num b) = Num (a + b)
@@ -220,3 +161,23 @@ lte _ _ = Err Uncomparable
 divExp :: Expr -> Expr -> Expr
 divExp (Num a) (Num b) = Num (a / b)
 divExp _ _ = Err NaN
+
+evalE :: Expre a -> EvalEMS a
+evalE (NumE n)   = return n
+evalE (BoolE b)  = return b
+evalE (StrE s)   = return s
+evalE (AddE a b) = do
+  l <- evalEvalEMS (evalE a) <$> get
+  r <- evalEvalEMS (evalE b) <$> get
+  return (l + r)
+-- evalE (SubE a b) = evalE a - evalE b
+-- evalE (MulE a b) = evalE a * evalE b
+-- evalE (DivE a b) = evalE a / evalE b
+-- evalE (PowE a b) = evalE a ** evalE b
+-- evalE (LtE a b)  = evalE a < evalE b
+-- evalE (LteE a b) = evalE a <= evalE b
+-- evalE (GtE a b)  = evalE a > evalE b
+-- evalE (GteE a b) = evalE a >= evalE b
+-- evalE (EqE a b)  = evalE a == evalE b
+-- evalE (NeqE a b) = evalE a /= evalE b
+
