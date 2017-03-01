@@ -49,9 +49,10 @@ data Expre a where
   GteE :: Expre Double -> Expre Double -> Expre Bool
   ArrE :: [a] -> Expre [a]
   ConstE :: Double -> Expre Double
-  VarE :: String -> Expre String
+  VarE :: String -> Expre Double
   StrE :: String -> Expre String
   BoolE :: Bool -> Expre Bool
+  LetE :: String -> Double -> Expre a -> Expre a
 
 data EvalEM a = EvalEM { hEnv :: [(String, Double)]
                      , hRes :: a} deriving (Show)

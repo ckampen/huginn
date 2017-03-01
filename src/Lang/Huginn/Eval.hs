@@ -5,12 +5,14 @@ import Control.Monad.State
 -- import Control.Applicative
 
 import Data.Maybe
+import Data.List as L
 import Lang.Huginn.AST
 -- import Debug.Trace
 
 type EnvEntry = (String, Expr)
 type EnvEntries = [EnvEntry]
 data Env = Env { vars :: EnvEntries, functions :: EnvEntries } deriving Show
+
 
 type EvalExpr = (Expr, Env)
 
@@ -60,6 +62,8 @@ isTrue _ = False
 
 type EvalM = State Env Expr
 
+-- type EvalEM a = State EnvNum Expre a
+
 -- evalEvalM :: State s a -> s -> a
 evalEvalM :: EvalM -> Env -> Expr
 evalEvalM = evalState
@@ -67,13 +71,6 @@ evalEvalM = evalState
 -- runEvalM :: State s a -> s -> (a, s)
 runEvalM :: EvalM -> Env -> (Expr, Env)
 runEvalM = runState
-
-type EvalEMS a = State Env a
-evalEvalEMS :: EvalEMS a -> Env -> a
-evalEvalEMS = evalState
-
-runEvalEMS :: EvalEMS a -> Env -> (a, Env)
-runEvalEMS = runState
 
 getVarValues :: String -> Env -> Expr
 getVarValues name env = fromMaybe (evalFns name env) (lookup name (vars env))
@@ -162,22 +159,47 @@ divExp :: Expr -> Expr -> Expr
 divExp (Num a) (Num b) = Num (a / b)
 divExp _ _ = Err NaN
 
-evalE :: Expre a -> EvalEMS a
+data EnvE a = EnvE [(String, Expre a)] -- deriving Show
+data EnvNum = EnvNum [(String, Double)] -- deriving Show
+
+type EvalEMS a = State EnvNum a
+
+type EvalT a = StateT EnvNum (Either String) a
+
+evalT :: EvalT a -> EnvNum -> Either String a
+evalT = evalStateT
+
+runT :: EvalT a -> EnvNum -> Either String (a, EnvNum)
+runT = runStateT
+
+evalEvalEMS :: EvalEMS a -> EnvNum -> a
+evalEvalEMS = evalState
+
+runEvalEMS :: EvalEMS a -> EnvNum -> (a, EnvNum)
+runEvalEMS = runState
+
+evalE :: Expre a -> EvalT a
 evalE (NumE n)   = return n
 evalE (BoolE b)  = return b
 evalE (StrE s)   = return s
-evalE (AddE a b) = do
-  l <- evalEvalEMS (evalE a) <$> get
-  r <- evalEvalEMS (evalE b) <$> get
-  return (l + r)
--- evalE (SubE a b) = evalE a - evalE b
--- evalE (MulE a b) = evalE a * evalE b
--- evalE (DivE a b) = evalE a / evalE b
--- evalE (PowE a b) = evalE a ** evalE b
--- evalE (LtE a b)  = evalE a < evalE b
--- evalE (LteE a b) = evalE a <= evalE b
--- evalE (GtE a b)  = evalE a > evalE b
--- evalE (GteE a b) = evalE a >= evalE b
--- evalE (EqE a b)  = evalE a == evalE b
--- evalE (NeqE a b) = evalE a /= evalE b
+evalE (AddE a b) = ( + )  <$> evalE a <*> evalE b
+evalE (SubE a b) = ( - )  <$> evalE a <*> evalE b
+evalE (MulE a b) = ( * )  <$> evalE a <*> evalE b
+evalE (DivE a b) = ( * )  <$> evalE a <*> evalE b
+evalE (PowE a b) = ( ** ) <$> evalE a <*> evalE b
+evalE (LtE a b)  = ( < )  <$> evalE a <*> evalE b
+evalE (LteE a b) = ( <= )  <$> evalE a <*> evalE b
+evalE (GtE a b)  = ( > )  <$> evalE a <*> evalE b
+evalE (GteE a b) = ( >= )  <$> evalE a <*> evalE b
+evalE (EqE a b)  = ( == )  <$> evalE a <*> evalE b
+evalE (NeqE a b) = ( /= )  <$> evalE a <*> evalE b
+evalE (LetE n v ex) = modify (\(EnvNum env) -> EnvNum ((n, v) : env)) >> evalE ex
+evalE (VarE n) = do
+  (EnvNum env) <- get
+  case  L.lookup n env of
+    (Just v) -> return v
+    Nothing -> error "" -- return $ Left "Not bound" -- TODO: StateT env Either String a
+
+test = (LetE "x" 1.0 (AddE (VarE "x") (NumE 2.0)))
+test2 = evalE test
 
