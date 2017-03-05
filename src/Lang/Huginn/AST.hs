@@ -32,6 +32,10 @@ data Expr = Uop (Operant, Expr)
           | Egt Expr Expr
           | Egte Expr Expr
           | Let String Expr Expr
+          | Fn String Expr Expr
+          | Define String Expr
+          | Fun String [(Expr, Expr)] Expr
+          | Lambda String Expr Expr
           deriving (Show, Read)
 
 data Expre a where
@@ -53,6 +57,7 @@ data Expre a where
   StrE :: String -> Expre String
   BoolE :: Bool -> Expre Bool
   LetE :: String -> Double -> Expre a -> Expre a
+  PrintE :: String -> Expre String
 
 data EvalEM a = EvalEM { hEnv :: [(String, Double)]
                      , hRes :: a} deriving (Show)

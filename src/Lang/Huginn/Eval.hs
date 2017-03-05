@@ -1,8 +1,19 @@
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 module Lang.Huginn.Eval where
 
+import Control.Monad.Identity
+import Control.Monad.Reader
 import Control.Monad.State
+import Control.Monad.Trans.Except
+import Control.Monad.Trans.Reader
+import Control.Exception
 -- import Control.Applicative
+import Control.Concurrent
+import Control.Concurrent.STM
+import Control.Monad.STM
+import Control.Applicative
+
 
 import Data.Maybe
 import Data.List as L
@@ -12,6 +23,88 @@ import Lang.Huginn.AST
 type EnvEntry = (String, Expr)
 type EnvEntries = [EnvEntry]
 data Env = Env { vars :: EnvEntries, functions :: EnvEntries } deriving Show
+
+newtype EvalRT a = MkEval (StateT [Env] Identity a)
+  deriving (Functor, Applicative, Monad, MonadState [Env])
+
+newEnv :: IO (TVar [Env])
+newEnv = atomically $ newTVar []
+
+runEvalRT :: EvalRT a -> (a, [Env])
+runEvalRT (MkEval state) =
+  runIdentity $ runStateT state [emptyEnv]
+
+runEvalx :: Expr -> (Expr, [Env])
+runEvalx e = runEvalRT (evalx e)
+
+lookupNamex :: String -> EvalRT (Maybe Expr)
+lookupNamex name = do
+  var <- lookupVarx name
+  case var of
+    Nothing -> lookupFnx name
+    x -> return x
+
+lookupVarx :: String -> EvalRT (Maybe Expr)
+lookupVarx name = findInEnvs vars name <$> get
+
+lookupFnx :: String -> EvalRT (Maybe Expr)
+lookupFnx name = findInEnvs functions name <$> get
+
+findInEnvs :: (Env -> EnvEntries) -> String -> [Env] -> Maybe Expr
+findInEnvs _ _ [] = Nothing
+findInEnvs fn name (x:xs) = lookup name (fn x) <|> findInEnvs fn name xs
+
+evalx :: Expr -> EvalRT Expr
+evalx (Eeq left right) = eq <$> evalx left <*> evalx right
+evalx (Egt left right) = gt <$> evalx left <*> evalx right
+evalx (Elt left right) = lt <$> evalx left <*> evalx right
+evalx (Egte left right) = gte <$> evalx left <*> evalx right
+evalx (Elte left right) = lte <$> evalx left <*> evalx right
+evalx (Epow left right) = pow <$> evalx left <*> evalx right
+evalx (Eadd left right) = add <$> evalx left <*> evalx right
+evalx (Esub left right) = sub <$> evalx left <*> evalx right
+evalx (Emul left right) = mul <$> evalx left <*> evalx right
+evalx (Ediv left right) = divExp <$> evalx left <*> evalx right
+evalx (Var n) = do
+  val <- lookupNamex n
+  case val of
+    Nothing -> return (Err (Unbound n))
+    (Just v) -> return v
+evalx a@(Num _) = return a
+evalx b@(Bl _) = return b
+evalx (Arr xs) = Arr <$> mapM evalx xs
+evalx (Let n v ex) = do
+  val <- evalx v
+  modify (\(env:xs) -> (env { vars = (n, val) : vars env }):xs)
+  evalx ex
+evalx (Fn n v ex) = do
+  val <- evalx v
+  modify (\(env:xs) -> (env { functions = (n, val) : functions env }):xs)
+  evalx ex
+evalx (Closure e) = evalx e
+evalx (If (test, left, right)) = do
+  predicate <- evalx test
+  case predicate of
+       (Bl True) -> evalx left
+       (Bl False) -> evalx right
+       _ -> return $ Err Uncomparable
+evalx (Closure exp) = do
+  modify (\envs -> emptyEnv : envs)
+  evalx exp
+evalx (Lambda p exp v) = do
+  val <- evalx v
+  modify (\envs -> (emptyEnv { vars = [(p, val)] }) : envs)
+  evalx exp
+evalx (Define n v) = do
+  val <- evalx v
+  modify (\(env:xs) -> (env { vars = (n, val) : vars env }):xs)
+  return val
+
+evalx e@(Err _) = return e
+evalx e = return $ Err (Unimplemented (show e))
+
+emptyEnv :: Env
+emptyEnv = Env [] []
 
 
 type EvalExpr = (Expr, Env)
@@ -61,6 +154,7 @@ isTrue (Bl False) = False
 isTrue _ = False
 
 type EvalM = State Env Expr
+-- type EvalM = ReaderT Env IO Expr
 
 -- type EvalEM a = State EnvNum Expre a
 
@@ -71,6 +165,28 @@ evalEvalM = evalState
 -- runEvalM :: State s a -> s -> (a, s)
 runEvalM :: EvalM -> Env -> (Expr, Env)
 runEvalM = runState
+
+-- lookupName :: String -> EvalM
+-- lookupName name = choose <$> lookupFn name <*> lookupVar name
+--   where choose (Err _) x = x
+--         choose x _ = x
+
+lookupName :: String -> EvalM
+lookupName name = do
+  var <- lookupVar name
+  case var of
+    (Err _) -> lookupFn name
+    x -> return x
+
+lookupVar :: String -> EvalM
+lookupVar name = do
+  env <- get
+  return $ fromMaybe (Err (Unbound name)) (lookup name (vars env))
+
+lookupFn :: String -> EvalM
+lookupFn name = do
+  env <- get
+  return $ fromMaybe (Err (Unbound name)) (lookup name (functions env))
 
 getVarValues :: String -> Env -> Expr
 getVarValues name env = fromMaybe (evalFns name env) (lookup name (vars env))
@@ -86,29 +202,30 @@ runEval env e = runEvalM (evals e) env
 -- runEval env e = trace ("\n\n#########\n\n" ++ show e ++ "\n\n#########\n\n") $ runEvalM (evals e) env
 
 evals :: Expr -> EvalM
-evals (Eeq left right) = runBinary eq left right <$> get
-evals (Egt left right) = runBinary gt left right <$> get
-evals (Elt left right) = runBinary lt left right <$> get
-evals (Egte left right) = runBinary gte left right <$> get
-evals (Elte left right) = runBinary lte left right <$> get
-evals (Epow left right) = runBinary pow left right <$> get
-evals (Eadd left right) = runBinary add left right <$> get
-evals (Esub left right) = runBinary sub left right <$> get
-evals (Emul left right) = runBinary mul left right <$> get
-evals (Ediv left right) = runBinary divExp left right <$> get
-evals (Var n) = fmap (getVarValues n) get
+evals (Eeq left right) = eq <$> evals left <*> evals right
+evals (Egt left right) = gt <$> evals left <*> evals right
+evals (Elt left right) = lt <$> evals left <*> evals right
+evals (Egte left right) = gte <$> evals left <*> evals right
+evals (Elte left right) = lte <$> evals left <*> evals right
+evals (Epow left right) = pow <$> evals left <*> evals right
+evals (Eadd left right) = add <$> evals left <*> evals right
+evals (Esub left right) = sub <$> evals left <*> evals right
+evals (Emul left right) = mul <$> evals left <*> evals right
+evals (Ediv left right) = divExp <$> evals left <*> evals right
+evals (Var n) = lookupName n
 evals a@(Num _) = return a
 evals b@(Bl _) = return b
+evals (Arr xs) = Arr <$> mapM evals xs
 evals (Let n v ex) = do
-  (val, env) <- runEvalM (evals v) <$> get
-  -- put (env { vars = (n, val) : vars env })
-  return $ evalEvalM (evals ex) (env { vars = (n, val) : vars env })
-evals (Closure e) = evalEvalM (evals e) <$> get
+  val <- evals v
+  modify (\env -> env { vars = (n, val) : vars env })
+  evals ex
+evals (Closure e) = evals e
 evals (If (test, left, right)) = do
-  (predicate, env) <- runEvalM (evals test) <$> get
+  predicate <- evals test
   case predicate of
-       (Bl True) -> return $ evalEvalM (evals left) env
-       (Bl False) -> return $ evalEvalM (evals right) env
+       (Bl True) -> evals left
+       (Bl False) -> evals right
        _ -> return $ Err Uncomparable
 evals e@(Err _) = return e
 evals e = return $ Err (Unimplemented (show e))
@@ -164,12 +281,19 @@ data EnvNum = EnvNum [(String, Double)] -- deriving Show
 
 type EvalEMS a = State EnvNum a
 
-type EvalT a = StateT EnvNum (Either String) a
+type EvalT a = StateT EnvNum IO a
 
-evalT :: EvalT a -> EnvNum -> Either String a
+
+data EnvTree = EnvTreeLeaf [(String, Expr)] | EnvTreeNode [(String, Expr)] [EnvTree]
+
+data EnvironMent a = EnvironMent { envx :: TVar EnvTree
+                               , callStackx :: TVar [Expre a]
+}
+
+evalT :: EvalT a -> EnvNum -> IO a
 evalT = evalStateT
 
-runT :: EvalT a -> EnvNum -> Either String (a, EnvNum)
+runT :: EvalT a -> EnvNum -> IO (a, EnvNum)
 runT = runStateT
 
 evalEvalEMS :: EvalEMS a -> EnvNum -> a
@@ -198,7 +322,8 @@ evalE (VarE n) = do
   (EnvNum env) <- get
   case  L.lookup n env of
     (Just v) -> return v
-    Nothing -> error "" -- return $ Left "Not bound" -- TODO: StateT env Either String a
+    Nothing -> error "Not bound"
+evalE (PrintE s) = liftIO (putStrLn s) >> return s
 
 test = (LetE "x" 1.0 (AddE (VarE "x") (NumE 2.0)))
 test2 = evalE test
