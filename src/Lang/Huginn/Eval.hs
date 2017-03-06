@@ -24,17 +24,16 @@ type EnvEntry = (String, Expr)
 type EnvEntries = [EnvEntry]
 data Env = Env { vars :: EnvEntries, functions :: EnvEntries } deriving Show
 
-newtype EvalRT a = MkEval (StateT [Env] Identity a)
-  deriving (Functor, Applicative, Monad, MonadState [Env])
+newtype EvalRT a = MkEval (StateT [Env] IO a)
+  deriving (Functor, Applicative, Monad, MonadIO,  MonadState [Env])
 
 newEnv :: IO (TVar [Env])
 newEnv = atomically $ newTVar []
 
-runEvalRT :: EvalRT a -> (a, [Env])
-runEvalRT (MkEval state) =
-  runIdentity $ runStateT state [emptyEnv]
+runEvalRT :: EvalRT a -> IO (a, [Env])
+runEvalRT (MkEval state) = runStateT state [emptyEnv]
 
-runEvalx :: Expr -> (Expr, [Env])
+runEvalx :: Expr -> IO (Expr, [Env])
 runEvalx e = runEvalRT (evalx e)
 
 lookupNamex :: String -> EvalRT (Maybe Expr)
@@ -96,6 +95,7 @@ evalx (Lambda p exp v) = do
   modify (\envs -> (emptyEnv { vars = [(p, val)] }) : envs)
   evalx exp
 evalx (Define n v) = do
+  liftIO $ print "define"
   val <- evalx v
   modify (\(env:xs) -> (env { vars = (n, val) : vars env }):xs)
   return val
@@ -135,14 +135,14 @@ exprToString (Bl True) = "true"
 exprToString (Bl False) = "false"
 exprToString _ = "Error"
 
-calc :: Operant -> Expr -> Expr -> Expr
-calc Add a b = getNumber a `add` getNumber b
-calc Mul a b = getNumber a `mul` getNumber b
-calc Sub a b = getNumber a `sub` getNumber b
-calc EQUALS a b = getNumber a `eq` getNumber b
-calc POW a b = getNumber a `pow` getNumber b
-calc Div a b = getNumber a `divExp` getNumber b
-calc _ _ _ = Err Unsupported
+-- calc :: Operant -> Expr -> Expr -> Expr
+-- calc Add a b = getNumber a `add` getNumber b
+-- calc Mul a b = getNumber a `mul` getNumber b
+-- calc Sub a b = getNumber a `sub` getNumber b
+-- calc EQUALS a b = getNumber a `eq` getNumber b
+-- calc POW a b = getNumber a `pow` getNumber b
+-- calc Div a b = getNumber a `divExp` getNumber b
+-- calc _ _ _ = Err Unsupported
 
 mapEnvEntries :: (String, Either t Expr) -> EnvEntry
 mapEnvEntries (n, Right ex) = (n, ex)
@@ -325,6 +325,6 @@ evalE (VarE n) = do
     Nothing -> error "Not bound"
 evalE (PrintE s) = liftIO (putStrLn s) >> return s
 
-test = (LetE "x" 1.0 (AddE (VarE "x") (NumE 2.0)))
+test = LetE "x" 1.0 (AddE (VarE "x") (NumE 2.0))
 test2 = evalE test
 

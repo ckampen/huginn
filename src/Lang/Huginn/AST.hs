@@ -8,11 +8,9 @@ import Control.Monad
 
 data Error = NaN | DivByZero | Unbound String | Parse | Uncomparable | Unsupported | Unimplemented String  deriving (Show, Read)
 
-data Operant = Mul | Div | Add | Sub | EQUALS | POW | Error String deriving (Show, Read)
+-- data Operant = Mul | Div | Add | Sub | EQUALS | POW | Error String deriving (Show, Read)
 
-data Expr = Uop (Operant, Expr)
-          | Bop (Expr, Operant, Expr)
-          | Num Double
+data Expr = Num Double
           | Const Double
           | Str String
           | Bl Bool
@@ -34,7 +32,7 @@ data Expr = Uop (Operant, Expr)
           | Let String Expr Expr
           | Fn String Expr Expr
           | Define String Expr
-          | Fun String [(Expr, Expr)] Expr
+          | Fun String [(String, Expr)] Expr
           | Lambda String Expr Expr
           deriving (Show, Read)
 
