@@ -5,8 +5,9 @@ module Lang.Huginn.Eval where
 import Control.Monad.Identity
 import Control.Monad.Reader
 import Control.Monad.State
-import Control.Monad.Trans.Except
-import Control.Monad.Trans.Reader
+import Control.Monad.Except
+-- import Control.Monad.Trans.Except
+-- import Control.Monad.Trans.Reader
 import Control.Exception
 -- import Control.Applicative
 import Control.Concurrent
@@ -24,17 +25,22 @@ type EnvEntry = (String, Expr)
 type EnvEntries = [EnvEntry]
 data Env = Env { vars :: EnvEntries, functions :: EnvEntries } deriving Show
 
-newtype EvalRT a = MkEval (StateT [Env] IO a)
-  deriving (Functor, Applicative, Monad, MonadIO,  MonadState [Env])
+newtype EvalRT a = MkEval (StateT [Env] (ExceptT Error IO) a)
+  deriving (Functor, Applicative, Monad, MonadError Error, MonadIO, MonadState [Env])
 
 newEnv :: IO (TVar [Env])
 newEnv = atomically $ newTVar []
 
-runEvalRT :: EvalRT a -> IO (a, [Env])
-runEvalRT (MkEval state) = runStateT state [emptyEnv]
+runEvalRT :: EvalRT a -> IO (Either Error (a, [Env]))
+runEvalRT (MkEval state) = runExceptT (runStateT state [emptyEnv])
 
-runEvalx :: Expr -> IO (Expr, [Env])
-runEvalx e = runEvalRT (evalx e)
+runEvalx :: Expr -> IO (Either Error (Expr, [Env]))
+runEvalx e = do
+  res <- runEvalRT (evalx e)
+  case res of
+    (Left err) -> print err
+    (Right r) -> print r
+  return res
 
 lookupNamex :: String -> EvalRT (Maybe Expr)
 lookupNamex name = do
@@ -54,8 +60,14 @@ findInEnvs _ _ [] = Nothing
 findInEnvs fn name (x:xs) = lookup name (fn x) <|> findInEnvs fn name xs
 
 evalx :: Expr -> EvalRT Expr
-evalx (Eeq left right) = eq <$> evalx left <*> evalx right
-evalx (Egt left right) = gt <$> evalx left <*> evalx right
+evalx (Eeq left right) = do
+  l <- evalx left
+  r <- evalx right
+  eq l r
+evalx (Egt left right) = join $ liftM2 gt (evalx left) (evalx right)
+  -- l <- evalx left
+  -- r <- evalx right
+  -- gt l r
 evalx (Elt left right) = lt <$> evalx left <*> evalx right
 evalx (Egte left right) = gte <$> evalx left <*> evalx right
 evalx (Elte left right) = lte <$> evalx left <*> evalx right
@@ -86,7 +98,8 @@ evalx (If (test, left, right)) = do
   case predicate of
        (Bl True) -> evalx left
        (Bl False) -> evalx right
-       _ -> return $ Err Uncomparable
+       -- _ -> return $ Err Uncomparable
+       _ -> throwError Uncomparable
 evalx (Closure exp) = do
   modify (\envs -> emptyEnv : envs)
   evalx exp
@@ -100,8 +113,10 @@ evalx (Define n v) = do
   modify (\(env:xs) -> (env { vars = (n, val) : vars env }):xs)
   return val
 
-evalx e@(Err _) = return e
-evalx e = return $ Err (Unimplemented (show e))
+-- evalx e@(Err _) = return e
+-- evalx (Err e) = throwError e
+-- evalx e = return $ Err (Unimplemented (show e))
+evalx e = throwError $ Unimplemented (show e)
 
 emptyEnv :: Env
 emptyEnv = Env [] []
@@ -202,9 +217,9 @@ runEval env e = runEvalM (evals e) env
 -- runEval env e = trace ("\n\n#########\n\n" ++ show e ++ "\n\n#########\n\n") $ runEvalM (evals e) env
 
 evals :: Expr -> EvalM
-evals (Eeq left right) = eq <$> evals left <*> evals right
-evals (Egt left right) = gt <$> evals left <*> evals right
-evals (Elt left right) = lt <$> evals left <*> evals right
+-- evals (Eeq left right) = eq <$> evals left <*> evals right
+-- evals (Egt left right) = gt <$> evals left <*> evals right
+-- evals (Elt left right) = lt <$> evals left <*> evals right
 evals (Egte left right) = gte <$> evals left <*> evals right
 evals (Elte left right) = lte <$> evals left <*> evals right
 evals (Epow left right) = pow <$> evals left <*> evals right
@@ -246,16 +261,16 @@ pow :: Expr -> Expr -> Expr
 pow (Num a) (Num b) = Num (a**b)
 pow _ _ = Err NaN
 
-eq :: Expr -> Expr -> Expr
-eq (Num a) (Num b) = Bl (a == b)
-eq (Bl a) (Bl b) = Bl (a == b)
-eq (Str a) (Str b) = Bl (a == b)
-eq _ _ = Err Uncomparable
+eq :: Expr -> Expr -> EvalRT Expr
+eq (Num a) (Num b) = return $ Bl (a == b)
+eq (Bl a) (Bl b) = return $ Bl (a == b)
+eq (Str a) (Str b) = return $ Bl (a == b)
+eq _ _ = throwError Uncomparable
 
-gt :: Expr -> Expr -> Expr
-gt (Num a) (Num b) = Bl (a > b)
-gt (Str a) (Str b) = Bl (a > b)
-gt _ _ = Err Uncomparable
+gt :: Expr -> Expr -> EvalRT Expr
+gt (Num a) (Num b) = return $ Bl (a > b)
+gt (Str a) (Str b) = return $ Bl (a > b)
+gt _ _ = throwError Uncomparable
 
 gte :: Expr -> Expr -> Expr
 gte (Num a) (Num b) = Bl (a >= b)
