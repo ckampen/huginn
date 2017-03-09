@@ -6,20 +6,15 @@ import Control.Monad.Identity
 import Control.Monad.Reader
 import Control.Monad.State
 import Control.Monad.Except
--- import Control.Monad.Trans.Except
--- import Control.Monad.Trans.Reader
 import Control.Exception
--- import Control.Applicative
 import Control.Concurrent
 import Control.Concurrent.STM
 import Control.Monad.STM
 import Control.Applicative
 
-
 import Data.Maybe
 import Data.List as L
 import Lang.Huginn.AST
--- import Debug.Trace
 
 type EnvEntry = (String, Expr)
 type EnvEntries = [EnvEntry]
@@ -292,12 +287,16 @@ divExp (Num a) (Num b) = Num (a / b)
 divExp _ _ = Err NaN
 
 data EnvE a = EnvE [(String, Expre a)] -- deriving Show
-data EnvNum = EnvNum [(String, Double)] -- deriving Show
+-- data EnvValue = EvNum (Expre Double) | EnvBool (Expre Bool)
+data Value = ValNum Double | ValBool Bool
+newtype EnvNum = EnvNum [(String, Double)] -- deriving Show
+newtype EnvBool = EnvBool [(String, Bool)]
+
+data ExpreEnv = ExpreEnv { values :: EnvNum , predicates :: EnvBool }
 
 type EvalEMS a = State EnvNum a
 
 type EvalT a = StateT EnvNum IO a
-
 
 data EnvTree = EnvTreeLeaf [(String, Expr)] | EnvTreeNode [(String, Expr)] [EnvTree]
 
@@ -310,6 +309,9 @@ evalT = evalStateT
 
 runT :: EvalT a -> EnvNum -> IO (a, EnvNum)
 runT = runStateT
+
+evalEvalE :: Expre a -> IO a
+evalEvalE e = evalT (evalE e) (EnvNum [])
 
 evalEvalEMS :: EvalEMS a -> EnvNum -> a
 evalEvalEMS = evalState
@@ -339,6 +341,8 @@ evalE (VarE n) = do
     (Just v) -> return v
     Nothing -> error "Not bound"
 evalE (PrintE s) = liftIO (putStrLn s) >> return s
+evalE (SumE xs) = sum <$> mapM evalE xs
+evalE (ProdE xs) = product <$> mapM evalE xs
 
 test = LetE "x" 1.0 (AddE (VarE "x") (NumE 2.0))
 test2 = evalE test
