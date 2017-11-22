@@ -30,6 +30,8 @@ data Expr = Uop (Operant, Expr)
           | Egt Expr Expr
           | Egte Expr Expr
           | Let String Expr Expr
+          | Concat [Expr]
+          | CountIf String String
           deriving (Show, Read)
 
   -- data Lexpr = Lambda [Text] Lexpr

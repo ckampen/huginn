@@ -16,9 +16,17 @@ import Control.Applicative
 import Lang.Huginn.AST
 import Lang.Huginn.Eval (EnvEntry)
 
+countParseResult (_,_,Left _) (lefts, rights) = (lefts + 1, rights)
+countParseResult (_,_,Right _) (lefts, rights) = (lefts, rights + 1)
+
+
+partitionFormulas (lefts, rights) a@(_,_,Left _) = (a:lefts, rights)
+partitionFormulas (lefts, rights) a@(_,_,Right _) = (lefts, a:rights)
+
 -- PARSER
 -- mkFnRec ::
--- mkFnRec name fn = (name, parseExpr fn)
+mkFnRec sheet name fn = (sheet, name, parseExpr fn)
+-- mkFnRec sheet name fn = (sheet, name, fn)
 
 -- mkRow i name value value_type = (i, name, value, value_type)
 -- mkInstanceRow i name value value_type = (i, readExpr name value value_type)
@@ -28,14 +36,14 @@ import Lang.Huginn.Eval (EnvEntry)
 --           tv = read tvalue :: Double
 
 -- -- TSV
--- notTabDelim = many (noneOf "\t\n")
+notTabDelim = many (noneOf "\t\n")
 
--- tsvCell = stringLiteral <|> notTabDelim
--- tsvToken = tab *> tsvCell
+tsvCell = stringLiteral <|> notTabDelim
+tsvToken = tab *> tsvCell
 
--- tsvFunction = mkFnRec <$> tsvCell <*> tsvToken
--- tsvFunctionsFile = tsvFunction `endBy` string "\n" <* eof
--- parseTSVFunctions = parse tsvFunctionsFile "ERROR"
+tsvFunction = mkFnRec <$> tsvCell <*> tsvToken <*> tsvToken
+tsvFunctionsFile = tsvFunction `endBy` string "\n" <* eof
+parseTSVFunctions = parse tsvFunctionsFile "ERROR"
 
 -- tsvInstanceFile = tsvInstanceLine `endBy` string "\n" <* eof
 -- tsvInstanceLine = mkInstanceRow <$> natural <*> tsvCell <*> tsvToken <*> tsvToken
@@ -65,6 +73,18 @@ closure :: Parser Expr
 -- closure =  Closure <$> (lexeme (char '(') *> code <* lexeme (char ')'))
 closure = Closure <$> parens code
 
+ifexcel :: Parser Expr
+ifexcel = (string "IF") *> parens ifexcel'
+
+ifexcel' :: Parser Expr
+ifexcel' = do
+  test <- expr
+  _ <- lexeme (char ',')
+  left <- code
+  _ <- lexeme (char ',')
+  right <- code
+  return $ If (test, left, right)
+
 ifStatement :: Parser Expr
 ifStatement = do
   _ <- lexeme (string "if")
@@ -86,6 +106,28 @@ pythonIf = do
   right <- elseStatement
   return $ If (test, left, right)
 
+excelIf :: Parser Expr
+excelIf = do
+  _ <- lexeme (string "IF")
+  _ <- lexeme (char '(')
+  test <- expr
+  _ <- lexeme (char ',')
+  left <- code
+  _ <- lexeme (char ',')
+  right <- code
+  _ <- lexeme (char ')')
+  return $ If (test, left, right)
+
+countIf :: Parser Expr
+countIf = do
+  _ <- lexeme (string "COUNTIF")
+  _ <- lexeme (char '(')
+  range <- word
+  _ <- lexeme (char ',')
+  test <- stringLiteral
+  _ <- lexeme (char ')')
+  return $ CountIf range test
+
 elseStatement :: Parser Expr
 elseStatement = lexeme (string "else") *> expr
 
@@ -93,7 +135,7 @@ stxVar :: Parser Expr
 stxVar = Var <$> var
 
 word :: Parser String
-word = lexeme $ many (noneOf " +-?<>\t\n,;()[]{}*^%&$#@!/|\'\"")
+word = lexeme $ many (noneOf " =+-?<>\t\n,;()[]{}*^%&$#@!/|\'\"")
 
 line :: Parser String
 line = many (noneOf "\n")
@@ -129,6 +171,14 @@ array :: Parser [Expr]
 array = brackets $ commaSep expr
 -- array = lexeme (char '[') *> expr `sepBy` lexeme (char ',') <* lexeme (char ']')
 
+concatenate :: Parser [Expr]
+concatenate =  string "CONCATENATE" *> parens (commaSep code)
+  -- return $ Concat elems
+  --
+stxConcat :: Parser Expr
+stxConcat = Concat <$> concatenate
+
+
 stxArray :: Parser Expr
 stxArray = Arr <$> array
 
@@ -153,12 +203,15 @@ stxLet = do
 
   return $ Let ident val exp
 
+equals :: Parser Expr
+equals = Eeq <$> expr <* (lexeme $ string "=") *> expr
 
 -- TODO: check for reserved words in variable names e.g. "if"
 expr :: Parser Expr
-expr = try bla <|> stxString <|> stxArray <|> closure <|> stxNum <|> stxBool <|> stxLet  <|> stxVar
+expr = try bla <|> stxString <|> stxArray <|> closure <|> stxNum <|> try stxBool <|> try stxLet <|> try statement <|> stxVar
 
-parens :: Parser Expr -> Parser Expr
+-- parens :: Parser Expr -> Parser Expr
+parens :: Parser a -> Parser a
 parens = P.parens lexer
 
 double :: Parser Double
@@ -202,24 +255,24 @@ table = [
              ,[ binary "<=" Elte AssocLeft]
              ,[ binary ">" Egt AssocLeft]
              ,[ binary ">=" Egte AssocLeft]
-             -- ,[ binary "=" Eeq AssocLeft]
+             ,[ binary "=" Eeq AssocLeft]
              ,[ binary "==" Eeq AssocLeft]
           ]
 
 term :: Parser Expr
-term = parens bla <|> stxNum <|> stxString <|> stxBool <|> stxLet <|> stxVar
+term = parens bla <|> stxNum <|> stxString <|> stxBool <|> stxLet <|> ifexcel <|> closure <|> stxVar
 
 bla :: Parser Expr
-bla = buildExpressionParser table term <?> "expression"
+bla = buildExpressionParser table (lexeme term) <?> "expression"
 
 exprPython :: Parser Expr
 exprPython = stxString <|> stxArray <|> closure <|> stxNum <|> (try stxBool <|> stxVar)
 
 statement :: Parser Expr
-statement = ifStatement <|> pythonIf
+statement = excelIf <|> ifStatement <|> try stxConcat <|> countIf <|> pythonIf
 
 code :: Parser Expr
-code = try statement <|> expr
+code = try statement <|> expr <|> closure
 
 formula :: Parser Expr
 formula = code <* eof
@@ -240,3 +293,4 @@ parseExpr = parse formula "Parse error"
 testParser :: Parser Expr -> String -> Either ParseError Expr
 testParser p = parse p "Some Error"
 
+testString = "IF(DC105=\"\",0,DC105-(IF(DC195=\"\",0,DC195)+IF(DC285=\"\",0,DC285)+IF(DC375=\"\",0,DC375)+IF(DC465=\"\",0,DC465)+IF(DC555=\"\",0,DC555)+IF(DC645=\"\",0,DC645)+IF(DC735=\"\",0,DC735)+IF(DC825=\"\",0,DC825)+IF(DC915=\"\",0,DC915)+IF(DC1005=\"\",0,DC1005)+IF(DC1095=\"\",0,DC1095)+IF(DC1185=\"\",0,DC1185)+IF(DC1275=\"\",0,DC1275)+IF(DC1365=\"\",0,DC1365)+IF(DC1455=\"\",0,DC1455)+IF(DC1545=\"\",0,DC1545)))"
